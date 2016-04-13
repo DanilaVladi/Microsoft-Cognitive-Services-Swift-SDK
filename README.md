@@ -1,7 +1,7 @@
 # Microsoft Cognitive Services Swift SDK
 
-This repo contains a SDK and a sample project for [Microsoft Cognitive Services](<https://www.microsoft.com/cognitive-services>) written in Swift since Microsoft doesn't provides one.
-If you are looking for the Windows, Android or Phython SDK you can find them [here](<https://github.com/Microsoft/ProjectOxford-ClientSDK/tree/master/Vision>)
+This repo contains a SDK and a sample project for [Microsoft Cognitive Services](<https://www.microsoft.com/cognitive-services>) written in Swift since Microsoft doesn't provide one.
+If you are looking for the Windows, Android or Phython SDK you can find them [here](<https://github.com/Microsoft/ProjectOxford-ClientSDK/tree/master/Vision>).
 
 The repo contains a client SDK for the following areas (Work in progress):  
 
@@ -51,7 +51,7 @@ Contributing
 ============
 In case you want to contribute go ahead and create that pull request :).There's plenty more to do. Feel free to file issues on the repo and I'll try address them as soon as possible.
 
-For questions, feedback, or suggestions about the SDK, feel free to get in touch with [me](mailto:vladidanila@me.com?Subject=Microsoft-Cognitive-Services-Swift-SDK&Body=Hi%20Vladimir%20). If you have questions about Microsfts Cognitive Services please get in touch wiht them.
+For questions, feedback, or suggestions about the SDK, feel free to get in touch with [me](mailto:vladidanila@me.com?Subject=Microsoft-Cognitive-Services-Swift-SDK&Body=Hi%20Vladimir%20). If you have questions about Microsfts Cognitive Services please get in touch with them.
 
 
 
