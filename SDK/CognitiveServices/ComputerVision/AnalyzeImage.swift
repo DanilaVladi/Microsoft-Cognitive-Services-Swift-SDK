@@ -46,6 +46,42 @@ class AnalyzeImage: NSObject {
     }
     
     
+    
+    /**
+     Used as a parameter for `recognizeCharactersOnImageUrl`
+     
+    Read more about it [here](https://dev.projectoxford.ai/docs/services/56f91f2d778daf23d8ec6739/operations/56f91f2e778daf14a499e1fa)
+    */
+    enum AnalyzeImageVisualFeatures: String {
+        case None = ""
+        case ImageType = "ImageType"
+        case Color = "Color"
+        case Faces = "Faces"
+        case Adult = "Adult"
+        case Categories = "Categories"
+        case All = "All"
+    }
+    
+    
+    
+    /**
+    Used as a parameter for `recognizeCharactersOnImageUrl`
+    
+    Read more about it [here](https://dev.projectoxford.ai/docs/services/56f91f2d778daf23d8ec6739/operations/56f91f2e778daf14a499e1fa)
+    */
+    enum AnalyzeImageDetails: String {
+        case None = ""
+        case ImageType = "ImageType"
+        case Celebrities = "Celebrities"
+        case Faces = "Faces"
+        case Adult = "Adult"
+        case Categories = "Categories"
+        case Color = "Color"
+        case Tags = "Tags"
+        case Description = "Description"
+    }
+ 
+    
     /**
      This operation extracts a rich set of visual features based on the image content.
      
@@ -53,12 +89,12 @@ class AnalyzeImage: NSObject {
      - parameter visualFeatures, details: Read more about those [here](https://dev.projectoxford.ai/docs/services/56f91f2d778daf23d8ec6739/operations/56f91f2e778daf14a499e1fa)
      - parameter completion: Once the request has been performed the response is returend as a JSON Object in the completion block.
      */
-    func recognizeCharactersOnImageUrl(imageUrl: String, visualFeatures: String = "", details: String = "",completion: (response: JSON) -> Void) throws {
+    func recognizeCharactersOnImageUrl(imageUrl: String, visualFeatures: AnalyzeImageVisualFeatures = .All, details: AnalyzeImageDetails = .Categories, completion: (response: JSON) -> Void) throws {
      
         // Create the Query parameters
         var computedVisualFeatures: String {
-            if visualFeatures.isEmpty != false {
-                return  "visualFeatures=" + visualFeatures
+            if visualFeatures != .None {
+                return  "visualFeatures=" + visualFeatures.rawValue
             }
             else {
                 return ""
@@ -67,8 +103,8 @@ class AnalyzeImage: NSObject {
         
         var computedDetails: String {
             
-            if details.isEmpty != false {
-                return "details=" + details
+            if details != .None {
+                return "details=" + details.rawValue
             }
             else {
                 return ""
@@ -86,7 +122,7 @@ class AnalyzeImage: NSObject {
         }
         
         // Generate the url
-        let requestUrlString = url + qMark + visualFeatures + computedDetails
+        let requestUrlString = url + qMark + computedVisualFeatures + computedDetails
         let requestUrl = NSURL(string: requestUrlString)
 
         
