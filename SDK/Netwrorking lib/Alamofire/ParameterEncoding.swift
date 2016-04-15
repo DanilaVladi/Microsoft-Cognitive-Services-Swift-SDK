@@ -1,6 +1,6 @@
 // ParameterEncoding.swift
 //
-// Copyright (c) 2014–2016 Alamofire Software Foundation (http://alamofire.org/)
+// Copyright (c) 2014–2016 Alamofire Software Foundation (http://alamofire.org/) & 2016 Vladimir Danila
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -237,7 +237,7 @@ public enum ParameterEncoding {
             while index != string.endIndex {
                 let startIndex = index
                 let endIndex = index.advancedBy(batchSize, limit: string.endIndex)
-                let range = Range(start: startIndex, end: endIndex)
+                let range = startIndex ..< endIndex
 
                 let substring = string.substringWithRange(range)
 

@@ -196,6 +196,7 @@
 		64A8343B1CBEB63B0077AF3E /* CognitiveServices */ = {
 			isa = PBXGroup;
 			children = (
+				64B7FE1A1CC0B6FA00008C28 /* Emotion */,
 				64A8343E1CBEB63B0077AF3E /* ComputerVision */,
 				64A834401CBEB63B0077AF3E /* JSON.swift */,
 				64A8343C1CBEB63B0077AF3E /* CognitiveServices.swift */,
@@ -250,6 +251,13 @@
 				64A834561CBEB63B0077AF3E /* Validation.swift */,
 			);
 			path = Alamofire;
+			sourceTree = "<group>";
+		};
+		64B7FE1A1CC0B6FA00008C28 /* Emotion */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Emotion;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -557,6 +565,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = CognitiveServices/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.vladidanila.CognitiveServices;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -568,6 +577,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = CognitiveServices/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.vladidanila.CognitiveServices;
 				PRODUCT_NAME = "$(TARGET_NAME)";
