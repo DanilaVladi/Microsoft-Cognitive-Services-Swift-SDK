@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		641A94801CC4090D0065CFF1 /* JSONNSDataExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 641A947F1CC4090D0065CFF1 /* JSONNSDataExtension.swift */; };
 		64A8340D1CBEB6200077AF3E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64A8340C1CBEB6200077AF3E /* AppDelegate.swift */; };
 		64A8340F1CBEB6200077AF3E /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64A8340E1CBEB6200077AF3E /* ViewController.swift */; };
 		64A834121CBEB6200077AF3E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 64A834101CBEB6200077AF3E /* Main.storyboard */; };
@@ -16,7 +17,6 @@
 		64A8342D1CBEB6200077AF3E /* CognitiveServicesUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64A8342C1CBEB6200077AF3E /* CognitiveServicesUITests.swift */; };
 		64A834571CBEB63B0077AF3E /* CognitiveServices.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64A8343C1CBEB63B0077AF3E /* CognitiveServices.swift */; };
 		64A834591CBEB63B0077AF3E /* OCR.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64A8343F1CBEB63B0077AF3E /* OCR.swift */; };
-		64A8345A1CBEB63B0077AF3E /* JSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64A834401CBEB63B0077AF3E /* JSON.swift */; };
 		64A8345B1CBEB63B0077AF3E /* Alamofire.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64A834441CBEB63B0077AF3E /* Alamofire.swift */; };
 		64A8345C1CBEB63B0077AF3E /* Download.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64A834451CBEB63B0077AF3E /* Download.swift */; };
 		64A8345D1CBEB63B0077AF3E /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64A834461CBEB63B0077AF3E /* Error.swift */; };
@@ -62,6 +62,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		641A947F1CC4090D0065CFF1 /* JSONNSDataExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSONNSDataExtension.swift; sourceTree = "<group>"; };
 		64A834091CBEB6200077AF3E /* CognitiveServices.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CognitiveServices.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		64A8340C1CBEB6200077AF3E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		64A8340E1CBEB6200077AF3E /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -77,7 +78,6 @@
 		64A8342E1CBEB6200077AF3E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		64A8343C1CBEB63B0077AF3E /* CognitiveServices.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CognitiveServices.swift; sourceTree = "<group>"; };
 		64A8343F1CBEB63B0077AF3E /* OCR.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OCR.swift; sourceTree = "<group>"; };
-		64A834401CBEB63B0077AF3E /* JSON.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSON.swift; sourceTree = "<group>"; };
 		64A834431CBEB63B0077AF3E /* Alamofire.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Alamofire.h; sourceTree = "<group>"; };
 		64A834441CBEB63B0077AF3E /* Alamofire.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Alamofire.swift; sourceTree = "<group>"; };
 		64A834451CBEB63B0077AF3E /* Download.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Download.swift; sourceTree = "<group>"; };
@@ -198,7 +198,7 @@
 			children = (
 				64B7FE1A1CC0B6FA00008C28 /* Emotion */,
 				64A8343E1CBEB63B0077AF3E /* ComputerVision */,
-				64A834401CBEB63B0077AF3E /* JSON.swift */,
+				641A947F1CC4090D0065CFF1 /* JSONNSDataExtension.swift */,
 				64A8343C1CBEB63B0077AF3E /* CognitiveServices.swift */,
 			);
 			path = CognitiveServices;
@@ -401,7 +401,6 @@
 				64A834571CBEB63B0077AF3E /* CognitiveServices.swift in Sources */,
 				64A8340F1CBEB6200077AF3E /* ViewController.swift in Sources */,
 				64B7FE151CC04A5000008C28 /* GetThumbnail.swift in Sources */,
-				64A8345A1CBEB63B0077AF3E /* JSON.swift in Sources */,
 				64A834631CBEB63B0077AF3E /* Notifications.swift in Sources */,
 				64A834651CBEB63B0077AF3E /* Request.swift in Sources */,
 				64B7FE171CC04A9400008C28 /* DescribeImage.swift in Sources */,
@@ -409,6 +408,7 @@
 				64A834671CBEB63B0077AF3E /* ResponseSerialization.swift in Sources */,
 				64A8346F1CBEBD570077AF3E /* AnalyzeImage.swift in Sources */,
 				64A8346D1CBEB63B0077AF3E /* Validation.swift in Sources */,
+				641A94801CC4090D0065CFF1 /* JSONNSDataExtension.swift in Sources */,
 				64A834611CBEB63B0077AF3E /* MultipartFormData.swift in Sources */,
 				64B7FE111CC049AB00008C28 /* ListDomainSpecificModels.swift in Sources */,
 				64A8340D1CBEB6200077AF3E /* AppDelegate.swift in Sources */,

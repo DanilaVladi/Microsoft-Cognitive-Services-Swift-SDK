@@ -75,7 +75,7 @@ class OcrComputerVision: NSObject {
      - parameter language: The languange
      - parameter completion: Once the request has been performed the response is returend in the completion block.
      */
-    func recognizeCharactersOnImageUrl(imageUrl: String, language: Langunages, detectOrientation: Bool = true, completion: (response: JSON) -> Void) throws {
+    func recognizeCharactersOnImageUrl(imageUrl: String, language: Langunages, detectOrientation: Bool = true, completion: (response: [String:AnyObject] ) -> Void) throws {
         
         // Generate the url
         let requestUrlString = url + "?language=" + language.rawValue + "&detectOrientation%20=\(detectOrientation)"
@@ -108,44 +108,75 @@ class OcrComputerVision: NSObject {
             }
             
             
-            let responseJson = JSON(data: data) 
+            let responseDictionary = data.convertJSONToDictionary()
             
-            completion(response: responseJson)
-            
+            completion(response: responseDictionary!)
             
         }
         
     }
+  
     
     /**
-     Returns an Array of Strings extracted from the JSON generated from `recognizeCharactersOnImageUrl()`
+     Optical Character Recognition (OCR) detects text in an image and extracts the recognized characters into a machine-usable character stream.
      
-     - Parameter json:   The JSON created by `recognizeCharactersOnImageUrl()`.
-     
-     - Returns: An String Array extracted from the JSON.
+     - parameter imageData: The data of the image
+     - parameter language: The languange
+     - parameter completion: Once the request has been performed the response is returend in the completion block.
      */
-    class func extractStringsFromJson(json: JSON) -> [String] {
-        
-        let inputJson = json.dictionary
-        
-        let regions = inputJson!["regions"]!.array![0].dictionary!
-        let lines = regions["lines"]!.array!
+    func recognizeCharactersOnImageData(imageData: NSData, language: Langunages, detectOrientation: Bool = true, completion: (response: [String:AnyObject] ) -> Void) throws {
+
         
         
-        var composedText: [String] = []
+        // TODO: - Implementation missing 
         
-        for (_, line) in lines.enumerate() {
-            let inLine = line.dictionary!["words"]!.array
-            
-            for (_, text) in inLine!.enumerate() {
-                let extractedText = text["text"].string!
-                
-                composedText.append(extractedText)
+        
+        
+    }
+
+    
+    
+    /**
+     Returns an Array of Strings extracted from the Dictionary generated from `recognizeCharactersOnImageUrl()`
+     
+     - Parameter dictionary:   The Dictionary created by `recognizeCharactersOnImageUrl()`.
+     
+     - Returns: An String Array extracted from the Dictionary.
+     */
+    func extractStringsFromDictionary(dictionary: [String : AnyObject]) -> [String] {
+        
+        // Get Regions from the dictionary
+        let regions = dictionary["regions"]![0] as? [String:AnyObject]
+        
+        // Get lines from the regions dictionary
+        let lines = regions!["lines"] as! NSArray
+        
+        // Get words from lines
+        let inLine = lines.enumerate().map {$0.element["words"] as! [[String : AnyObject]] }
+        
+        // Get text from words
+        let extractedText = inLine.enumerate().map { $0.element[0]["text"] as! String}
+        
+        return extractedText
+    }
+    
+    /**
+     Returns a String extracted from the Dictionary generated from `recognizeCharactersOnImageUrl()`
+     
+     - Parameter dictionary:   The Dictionary created by `recognizeCharactersOnImageUrl()`.
+     
+     - Returns: A String extracted from the Dictionary.
+     */
+    func extractStringFromDictionary(dictionary: [String:AnyObject]) -> String {
+        
+        let stringArray = extractStringsFromDictionary(dictionary)
+        
+        let reducedArray = stringArray.enumerate().reduce("", combine:
+            {
+                $0 + $1.element + ($1.index < stringArray.endIndex-1 ? " " : "")
             }
-            
-        }
-        
-        return composedText
+        )
+        return reducedArray
     }
     
 }

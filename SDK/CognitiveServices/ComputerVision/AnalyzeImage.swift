@@ -98,7 +98,7 @@ class AnalyzeImage: NSObject {
      - parameter visualFeatures, details: Read more about those [here](https://dev.projectoxford.ai/docs/services/56f91f2d778daf23d8ec6739/operations/56f91f2e778daf14a499e1fa)
      - parameter completion: Once the request has been performed the response is returend as a JSON Object in the completion block.
      */
-    func recognizeCharactersOnImageUrl(imageUrl: String, visualFeatures: AnalyzeImageVisualFeatures = .All, details: AnalyzeImageDetails = .Categories, completion: (response: JSON) -> Void) throws {
+    func recognizeCharactersOnImageUrl(imageUrl: String, visualFeatures: AnalyzeImageVisualFeatures = .All, details: AnalyzeImageDetails = .Categories, completion: (response: [String : AnyObject]) -> Void) throws {
      
         // Create the Query parameters
         var computedVisualFeatures: String {
@@ -163,10 +163,8 @@ class AnalyzeImage: NSObject {
                 }
                 
                 
-                let responseJson = JSON(data: data)
-                
-                completion(response: responseJson)
-                
+                let responseDictionary = data.convertJSONToDictionary()
+                completion(response: responseDictionary!)
                 
         }
         
