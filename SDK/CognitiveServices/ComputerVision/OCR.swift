@@ -63,6 +63,7 @@ class OcrComputerVision: NSObject {
     
     
     enum RecognizeCharactersErrors: ErrorType {
+        case UnknownError
         case ImageUrlWrongFormatted
     }
     
@@ -117,6 +118,9 @@ class OcrComputerVision: NSObject {
     }
   
     
+    // TODO: - Implementation Missing
+    
+    
     /**
      Optical Character Recognition (OCR) detects text in an image and extracts the recognized characters into a machine-usable character stream.
      
@@ -124,18 +128,44 @@ class OcrComputerVision: NSObject {
      - parameter language: The languange
      - parameter completion: Once the request has been performed the response is returend in the completion block.
      */
-    func recognizeCharactersOnImageData(imageData: NSData, language: Langunages, detectOrientation: Bool = true, completion: (response: [String:AnyObject] ) -> Void) throws {
+    func recognizeCharactersOnImageData(imageData: NSData, language: Langunages, detectOrientation: Bool = true, completion: (response: [String:AnyObject]? ) -> Void) throws {
 
+        // Generate the url
+        let requestUrlString = url + "?language=" + language.rawValue + "&detectOrientation%20=\(detectOrientation)"
+        let requestUrl = NSURL(string: requestUrlString)
         
         
-        // TODO: - Implementation missing 
+        let request = NSMutableURLRequest(URL: requestUrl!)
+        request.setValue("application/octet-stream", forHTTPHeaderField: "Content-Type")
+        request.setValue(key, forHTTPHeaderField: "Ocp-Apim-Subscription-Key")
+        request.HTTPBody = imageData
+        request.HTTPMethod = "POST"
         
-        
-        
+        let task = NSURLSession.sharedSession().dataTaskWithRequest(request){ data, response, error in
+            if error != nil{
+                print("Error -> \(error)")
+                completion(response: nil)
+                return
+            }else{
+                let results = try! NSJSONSerialization.JSONObjectWithData(data!, options: []) as? [[String:AnyObject]]
+                
+                // MARK: - Is this neccesary?
+                let dict = results![0]
+                
+                // Hand dict over
+                completion(response: dict)
+                
+            }
+            
+        }
+        task.resume()
+
     }
+        
+        
+        
+    
 
-    
-    
     /**
      Returns an Array of Strings extracted from the Dictionary generated from `recognizeCharactersOnImageUrl()`
      

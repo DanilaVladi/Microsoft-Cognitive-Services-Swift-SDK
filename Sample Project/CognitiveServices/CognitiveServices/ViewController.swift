@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
     let cognitiveServices = CognitiveServices.sharedInstance
     
@@ -24,6 +24,33 @@ class ViewController: UIViewController {
     
     
     
+    // MARK: - UITableView Delegate
+    
+    @IBOutlet weak var tableView: UITableView!
+    
+    
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        
+    }
+    
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        return UITableViewCell()
+    }
+    
+    // MARK: - UITableViewDataSource Delegate
+    
+    
+    let demos = ["OCR"]
+    
+    
+    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+        return 1
+    }
+    
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return demos.count
+    }
+
     
     // MARK: - ComputerVision Examples
     
