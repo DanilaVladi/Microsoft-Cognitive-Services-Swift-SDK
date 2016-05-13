@@ -30,17 +30,22 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        
+        self.performSegueWithIdentifier(tableView.cellForRowAtIndexPath(indexPath)!.textLabel!.text!, sender: self)
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        return UITableViewCell()
+        
+        let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath) as UITableViewCell
+        
+        cell.textLabel?.text = demos[indexPath.row]
+        
+        return cell
     }
     
     // MARK: - UITableViewDataSource Delegate
     
     
-    let demos = ["OCR"]
+    let demos = ["Analyze Image","Describe Image","Get Thumbnail","List Domain Specific Model","OCR","Recognize Domain Specfic Content","Tag Image"]
     
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
@@ -54,25 +59,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     // MARK: - ComputerVision Examples
     
-
-    @IBAction func recognizeCharactersOnImageDidPush(sender: AnyObject) {
-        
-        let urlString = "http://digitalsynopsis.com/wp-content/uploads/2015/03/web-designer-developer-jokes-humour-funny-34.jpg"
-        
-        do {
-            try cognitiveServices.ocr.recognizeCharactersOnImageUrl(urlString, language: .Automatic, completion: { response in
-            
-                let string = self.cognitiveServices.ocr.extractStringFromDictionary(response)
-                print(string)
-                
-            })
-        }
-        catch {
-            print("Something went wrong")
-        }
-    
-    
-    }
 
 }
 

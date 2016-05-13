@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		641A94801CC4090D0065CFF1 /* JSONNSDataExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 641A947F1CC4090D0065CFF1 /* JSONNSDataExtension.swift */; };
+		645100F51CE6362F00C26C1E /* OCRViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 645100F41CE6362F00C26C1E /* OCRViewController.swift */; };
 		64A8340D1CBEB6200077AF3E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64A8340C1CBEB6200077AF3E /* AppDelegate.swift */; };
 		64A8340F1CBEB6200077AF3E /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64A8340E1CBEB6200077AF3E /* ViewController.swift */; };
 		64A834121CBEB6200077AF3E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 64A834101CBEB6200077AF3E /* Main.storyboard */; };
@@ -63,6 +64,7 @@
 
 /* Begin PBXFileReference section */
 		641A947F1CC4090D0065CFF1 /* JSONNSDataExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSONNSDataExtension.swift; sourceTree = "<group>"; };
+		645100F41CE6362F00C26C1E /* OCRViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OCRViewController.swift; sourceTree = "<group>"; };
 		64A834091CBEB6200077AF3E /* CognitiveServices.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CognitiveServices.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		64A8340C1CBEB6200077AF3E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		64A8340E1CBEB6200077AF3E /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -131,6 +133,22 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		645100F21CE5FA0A00C26C1E /* Example Code */ = {
+			isa = PBXGroup;
+			children = (
+				645100F31CE6360C00C26C1E /* ComputerVision */,
+			);
+			path = "Example Code";
+			sourceTree = "<group>";
+		};
+		645100F31CE6360C00C26C1E /* ComputerVision */ = {
+			isa = PBXGroup;
+			children = (
+				645100F41CE6362F00C26C1E /* OCRViewController.swift */,
+			);
+			path = ComputerVision;
+			sourceTree = "<group>";
+		};
 		64A834001CBEB6200077AF3E = {
 			isa = PBXGroup;
 			children = (
@@ -154,6 +172,7 @@
 		64A8340B1CBEB6200077AF3E /* CognitiveServices */ = {
 			isa = PBXGroup;
 			children = (
+				645100F21CE5FA0A00C26C1E /* Example Code */,
 				64A8343A1CBEB63B0077AF3E /* SDK */,
 				64A8340C1CBEB6200077AF3E /* AppDelegate.swift */,
 				64A8340E1CBEB6200077AF3E /* ViewController.swift */,
@@ -404,6 +423,7 @@
 				64A834631CBEB63B0077AF3E /* Notifications.swift in Sources */,
 				64A834651CBEB63B0077AF3E /* Request.swift in Sources */,
 				64B7FE171CC04A9400008C28 /* DescribeImage.swift in Sources */,
+				645100F51CE6362F00C26C1E /* OCRViewController.swift in Sources */,
 				64A834661CBEB63B0077AF3E /* Response.swift in Sources */,
 				64A834671CBEB63B0077AF3E /* ResponseSerialization.swift in Sources */,
 				64A8346F1CBEBD570077AF3E /* AnalyzeImage.swift in Sources */,

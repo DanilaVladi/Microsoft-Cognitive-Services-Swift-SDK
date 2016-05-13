@@ -65,7 +65,10 @@ class OcrComputerVision: NSObject {
     enum RecognizeCharactersErrors: ErrorType {
         case UnknownError
         case ImageUrlWrongFormatted
+        case EmptyDictionary
     }
+    
+    
     
     
     
@@ -98,6 +101,7 @@ class OcrComputerVision: NSObject {
         let parameters: [String : AnyObject] = [
             "url" : imageUrl
         ]
+        
         
         // Perform the request
         request(.POST, requestUrl!, headers: headers, parameters: parameters, encoding: .JSON)
@@ -147,14 +151,12 @@ class OcrComputerVision: NSObject {
                 completion(response: nil)
                 return
             }else{
-                let results = try! NSJSONSerialization.JSONObjectWithData(data!, options: []) as? [[String:AnyObject]]
-                
-                // MARK: - Is this neccesary?
-                let dict = results![0]
+                let results = try! NSJSONSerialization.JSONObjectWithData(data!, options: []) as? [String:AnyObject]
                 
                 // Hand dict over
-                completion(response: dict)
-                
+                dispatch_async(dispatch_get_main_queue()) {
+                    completion(response: results)
+                }
             }
             
         }
