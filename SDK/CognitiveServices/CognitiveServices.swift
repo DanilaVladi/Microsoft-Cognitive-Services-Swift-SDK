@@ -25,7 +25,7 @@ import UIKit
 enum CognitiveServicesApiKeys: String {
     
     // Vision
-    case ComputerVision = "ComputerVision Key"
+    case ComputerVision = "54860762164e4fa2a04a338afba1429e"
     case Emotion = "Emotion Key"
     case Face = "Face Key"
     case Video = "Video Key"

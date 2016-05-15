@@ -98,75 +98,38 @@ class AnalyzeImage: NSObject {
      - parameter visualFeatures, details: Read more about those [here](https://dev.projectoxford.ai/docs/services/56f91f2d778daf23d8ec6739/operations/56f91f2e778daf14a499e1fa)
      - parameter completion: Once the request has been performed the response is returend as a JSON Object in the completion block.
      */
-    func recognizeCharactersOnImageUrl(imageUrl: String, visualFeatures: AnalyzeImageVisualFeatures = .All, details: AnalyzeImageDetails = .Categories, completion: (response: [String : AnyObject]) -> Void) throws {
-     
-        // Create the Query parameters
-        var computedVisualFeatures: String {
-            if visualFeatures != .None {
-                return  "visualFeatures=" + visualFeatures.rawValue
-            }
-            else {
-                return ""
-            }
-        }
-        
-        var computedDetails: String {
-            
-            if details != .None {
-                return "details=" + details.rawValue
-            }
-            else {
-                return ""
-            }
-            
-        }
-        
-        var qMark: String {
-            if computedDetails.isEmpty != false || computedVisualFeatures.isEmpty != false {
-                return "?"
-            }
-            else {
-                return ""
-            }
-        }
-        
-        // Generate the url
-        let requestUrlString = url + qMark + computedVisualFeatures + computedDetails
-        let requestUrl = NSURL(string: requestUrlString)
+    func analyzeImageOnURL(imageURL: String, visualFeatures: AnalyzeImageVisualFeatures = .All, completion: (response: [String : AnyObject]?) -> Void) throws {
 
+        //Query parameters
+        let parameters = ["entities=true", "visualFeature=\(visualFeatures.rawValue)"].joinWithSeparator("&")
+        let requestURL = NSURL(string: url + "?" + parameters)!
         
-        // Set the request headers
-        let headers: [String : String] = [
-            "Content-Type" : "application/json",
-            "Ocp-Apim-Subscription-Key" : key
-        ]
+        let request = NSMutableURLRequest(URL: requestURL)
+        request.HTTPMethod = "POST"
+
+        // Request headers
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue(key, forHTTPHeaderField: "Ocp-Apim-Subscription-Key")
         
-        // Check if 'imageUrl' is formatted as an url
-        guard let _ = NSURL(string: imageUrl) else {
-            throw AnalyseImageErros.ImageUrlWrongFormatted
-        }
+        // Request body
+        request.HTTPBody = "{\"url\":\"\(imageURL!)\"}".dataUsingEncoding(NSUTF8StringEncoding)
         
-        
-        // Set the request parameters
-        let parameters: [String : AnyObject] = [
-            "url" : imageUrl
-        ]
-        
-        
-        // Perform the request
-        request(.POST, requestUrl!, headers: headers, parameters: parameters, encoding: .JSON)
-            .responseData { response in
+        let task = NSURLSession.sharedSession().dataTaskWithRequest(request){ data, response, error in
+            if error != nil{
+                print("Error -> \(error)")
+                completion(response: nil)
+                return
+            }else{
+                let results = try! NSJSONSerialization.JSONObjectWithData(data!, options: []) as? [String:AnyObject]
                 
-                // Check if data is empty
-                guard let data = response.data else {
-                    return
+                // Hand dict over
+                dispatch_async(dispatch_get_main_queue()) {
+                    completion(response: results)
                 }
-                
-                
-                let responseDictionary = data.convertJSONToDictionary()
-                completion(response: responseDictionary!)
-                
+            }
+            
         }
+        task.resume()
         
         
     }

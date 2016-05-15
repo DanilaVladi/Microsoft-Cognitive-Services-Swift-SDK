@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		641A94801CC4090D0065CFF1 /* JSONNSDataExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 641A947F1CC4090D0065CFF1 /* JSONNSDataExtension.swift */; };
+		6436F3611CE93100000FAEE4 /* AnalyzeImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6436F3601CE93100000FAEE4 /* AnalyzeImageViewController.swift */; };
 		645100F51CE6362F00C26C1E /* OCRViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 645100F41CE6362F00C26C1E /* OCRViewController.swift */; };
 		64A8340D1CBEB6200077AF3E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64A8340C1CBEB6200077AF3E /* AppDelegate.swift */; };
 		64A8340F1CBEB6200077AF3E /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64A8340E1CBEB6200077AF3E /* ViewController.swift */; };
@@ -64,6 +65,7 @@
 
 /* Begin PBXFileReference section */
 		641A947F1CC4090D0065CFF1 /* JSONNSDataExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSONNSDataExtension.swift; sourceTree = "<group>"; };
+		6436F3601CE93100000FAEE4 /* AnalyzeImageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnalyzeImageViewController.swift; sourceTree = "<group>"; };
 		645100F41CE6362F00C26C1E /* OCRViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OCRViewController.swift; sourceTree = "<group>"; };
 		64A834091CBEB6200077AF3E /* CognitiveServices.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CognitiveServices.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		64A8340C1CBEB6200077AF3E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -145,6 +147,7 @@
 			isa = PBXGroup;
 			children = (
 				645100F41CE6362F00C26C1E /* OCRViewController.swift */,
+				6436F3601CE93100000FAEE4 /* AnalyzeImageViewController.swift */,
 			);
 			path = ComputerVision;
 			sourceTree = "<group>";
@@ -434,6 +437,7 @@
 				64A8340D1CBEB6200077AF3E /* AppDelegate.swift in Sources */,
 				64A8346B1CBEB63B0077AF3E /* Timeline.swift in Sources */,
 				64B7FE191CC04AEF00008C28 /* TagImage.swift in Sources */,
+				6436F3611CE93100000FAEE4 /* AnalyzeImageViewController.swift in Sources */,
 				64A8346C1CBEB63B0077AF3E /* Upload.swift in Sources */,
 				64A8345D1CBEB63B0077AF3E /* Error.swift in Sources */,
 				64A8345B1CBEB63B0077AF3E /* Alamofire.swift in Sources */,

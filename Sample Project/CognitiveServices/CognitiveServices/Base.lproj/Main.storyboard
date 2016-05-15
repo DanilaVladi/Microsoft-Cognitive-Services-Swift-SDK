@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10116" systemVersion="15C50" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="P9W-hQ-VX0">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="P9W-hQ-VX0">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
@@ -59,6 +59,7 @@
                     <connections>
                         <outlet property="tableView" destination="Ich-he-w88" id="KZI-bb-8fH"/>
                         <segue destination="G63-Mn-ItJ" kind="show" identifier="OCR" id="7Em-VF-sbx"/>
+                        <segue destination="Fkw-Ii-ZTz" kind="show" identifier="Analyze Image" id="jKd-3S-mXl"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -77,29 +78,29 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="url" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="6hc-Y7-Npr">
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="url" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="6hc-Y7-Npr">
                                 <rect key="frame" x="20" y="192" width="560" height="30"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" keyboardType="URL"/>
                             </textField>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="Px3-Sa-yYT">
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="Px3-Sa-yYT">
                                 <rect key="frame" x="20" y="20" width="560" height="128"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="128" id="f1B-dz-TJN"/>
                                 </constraints>
-                                <mutableString key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</mutableString>
+                                <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ACP-je-OA1">
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ACP-je-OA1">
                                 <rect key="frame" x="20" y="268" width="205" height="30"/>
                                 <state key="normal" title="Select image from camera roll"/>
                                 <connections>
                                     <action selector="textFromImageDidPush:" destination="G63-Mn-ItJ" eventType="touchUpInside" id="ox4-H5-C7a"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Xzf-Tb-fps">
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Xzf-Tb-fps">
                                 <rect key="frame" x="20" y="230" width="158" height="30"/>
                                 <state key="normal" title="Get text from url image"/>
                                 <connections>
@@ -130,10 +131,10 @@
             </objects>
             <point key="canvasLocation" x="1800" y="-573"/>
         </scene>
-        <!--View Controller-->
+        <!--Analyze Image View Controller-->
         <scene sceneID="l84-0h-Y5f">
             <objects>
-                <viewController id="Fkw-Ii-ZTz" sceneMemberID="viewController">
+                <viewController id="Fkw-Ii-ZTz" customClass="AnalyzeImageViewController" customModule="CognitiveServices" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="mPg-t2-VLc"/>
                         <viewControllerLayoutGuide type="bottom" id="TBH-qS-qOf"/>
@@ -141,8 +142,46 @@
                     <view key="view" contentMode="scaleToFill" id="iVd-Ri-g55">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Trd-cc-Zjj">
+                                <rect key="frame" x="20" y="204" width="157" height="30"/>
+                                <state key="normal" title="Analyze image from url"/>
+                                <connections>
+                                    <action selector="analyzeFromURLDidPush:" destination="Fkw-Ii-ZTz" eventType="touchUpInside" id="EqI-WP-upZ"/>
+                                </connections>
+                            </button>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="jNe-X5-b2N">
+                                <rect key="frame" x="20" y="64" width="560" height="88"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="88" id="nRp-4U-iKy"/>
+                                </constraints>
+                                <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="url" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="LHK-Ba-7b7">
+                                <rect key="frame" x="20" y="166" width="560" height="30"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="jNe-X5-b2N" firstAttribute="leading" secondItem="iVd-Ri-g55" secondAttribute="leadingMargin" id="Eeo-DH-LPD"/>
+                            <constraint firstItem="LHK-Ba-7b7" firstAttribute="trailing" secondItem="iVd-Ri-g55" secondAttribute="trailingMargin" id="Nac-di-fm2"/>
+                            <constraint firstItem="Trd-cc-Zjj" firstAttribute="leading" secondItem="iVd-Ri-g55" secondAttribute="leadingMargin" id="Nli-rw-hbG"/>
+                            <constraint firstItem="jNe-X5-b2N" firstAttribute="trailing" secondItem="iVd-Ri-g55" secondAttribute="trailingMargin" id="OJt-Kf-ZGm"/>
+                            <constraint firstItem="Trd-cc-Zjj" firstAttribute="top" secondItem="LHK-Ba-7b7" secondAttribute="bottom" constant="8" id="ORO-xi-1gX"/>
+                            <constraint firstItem="LHK-Ba-7b7" firstAttribute="leading" secondItem="iVd-Ri-g55" secondAttribute="leadingMargin" id="Xtv-QP-2fQ"/>
+                            <constraint firstItem="jNe-X5-b2N" firstAttribute="top" secondItem="mPg-t2-VLc" secondAttribute="bottom" id="cAE-RH-CvI"/>
+                            <constraint firstItem="LHK-Ba-7b7" firstAttribute="top" secondItem="jNe-X5-b2N" secondAttribute="bottom" constant="14" id="o8d-dr-kxQ"/>
+                        </constraints>
                     </view>
+                    <connections>
+                        <outlet property="textView" destination="jNe-X5-b2N" id="zON-Em-1s0"/>
+                        <outlet property="urlTextField" destination="LHK-Ba-7b7" id="uRN-t0-fkA"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Pfp-MU-X30" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
