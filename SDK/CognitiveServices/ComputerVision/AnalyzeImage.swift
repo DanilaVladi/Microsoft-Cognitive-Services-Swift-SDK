@@ -112,7 +112,7 @@ class AnalyzeImage: NSObject {
         request.setValue(key, forHTTPHeaderField: "Ocp-Apim-Subscription-Key")
         
         // Request body
-        request.HTTPBody = "{\"url\":\"\(imageURL!)\"}".dataUsingEncoding(NSUTF8StringEncoding)
+        request.HTTPBody = "{\"url\":\"\(imageURL)\"}".dataUsingEncoding(NSUTF8StringEncoding)
         
         let task = NSURLSession.sharedSession().dataTaskWithRequest(request){ data, response, error in
             if error != nil{
