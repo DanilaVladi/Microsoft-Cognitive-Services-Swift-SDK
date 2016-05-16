@@ -17,14 +17,9 @@ class AnalyzeImageViewController: UIViewController {
     @IBAction func analyzeFromURLDidPush(sender: AnyObject) {
         
         let analyzeImage = CognitiveServices.sharedInstance.analyzeImage
-        let imageData = UIImagePNGRepresentation(UIImage(named: "ocrDemo")!)!
         
-        
-        try! analyzeImage.analyzeImageOnURL("") { response in
-
+        try! analyzeImage.analyzeImageOnURL(urlTextField.text!) { response in
             self.textView.text = response!.description
-
-        
         }
         
     }

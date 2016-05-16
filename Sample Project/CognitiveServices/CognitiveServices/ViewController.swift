@@ -57,8 +57,10 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
 
     
-    // MARK: - ComputerVision Examples
-    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        segue.destinationViewController.navigationItem.title = demos[tableView.indexPathForSelectedRow!.row]
+        tableView.deselectRowAtIndexPath(tableView.indexPathForSelectedRow!, animated: true)
+    }
 
 }
 

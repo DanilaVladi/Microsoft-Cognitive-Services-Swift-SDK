@@ -130,8 +130,7 @@ class AnalyzeImage: NSObject {
             
         }
         task.resume()
-        
-        
+    
     }
     
 }
