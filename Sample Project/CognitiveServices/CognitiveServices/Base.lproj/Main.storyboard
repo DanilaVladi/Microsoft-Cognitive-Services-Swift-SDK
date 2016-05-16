@@ -144,38 +144,54 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Trd-cc-Zjj">
-                                <rect key="frame" x="20" y="204" width="157" height="30"/>
+                                <rect key="frame" x="20" y="416" width="157" height="30"/>
                                 <state key="normal" title="Analyze image from url"/>
                                 <connections>
                                     <action selector="analyzeFromURLDidPush:" destination="Fkw-Ii-ZTz" eventType="touchUpInside" id="EqI-WP-upZ"/>
                                 </connections>
                             </button>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="jNe-X5-b2N">
-                                <rect key="frame" x="20" y="64" width="560" height="88"/>
+                                <rect key="frame" x="20" y="64" width="560" height="300"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="88" id="nRp-4U-iKy"/>
+                                    <constraint firstAttribute="height" constant="300" id="nRp-4U-iKy"/>
                                 </constraints>
                                 <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="url" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="LHK-Ba-7b7">
-                                <rect key="frame" x="20" y="166" width="560" height="30"/>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" verticalHuggingPriority="251" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="url" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="LHK-Ba-7b7">
+                                <rect key="frame" x="20" y="378" width="560" height="30"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
+                            <button opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="R4N-TT-Tcf">
+                                <rect key="frame" x="20" y="454" width="136" height="30"/>
+                                <state key="normal" title="Analyze local image"/>
+                                <connections>
+                                    <action selector="analyzeImageDidPush:" destination="Fkw-Ii-ZTz" eventType="touchUpInside" id="Z4b-7y-pn4"/>
+                                </connections>
+                            </button>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="749" image="analyzeImageDemo" translatesAutoresizingMaskIntoConstraints="NO" id="BxE-NJ-3jU">
+                                <rect key="frame" x="20" y="492" width="560" height="108"/>
+                            </imageView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstAttribute="trailingMargin" secondItem="BxE-NJ-3jU" secondAttribute="trailing" id="5as-sY-m5K"/>
                             <constraint firstItem="jNe-X5-b2N" firstAttribute="leading" secondItem="iVd-Ri-g55" secondAttribute="leadingMargin" id="Eeo-DH-LPD"/>
                             <constraint firstItem="LHK-Ba-7b7" firstAttribute="trailing" secondItem="iVd-Ri-g55" secondAttribute="trailingMargin" id="Nac-di-fm2"/>
                             <constraint firstItem="Trd-cc-Zjj" firstAttribute="leading" secondItem="iVd-Ri-g55" secondAttribute="leadingMargin" id="Nli-rw-hbG"/>
                             <constraint firstItem="jNe-X5-b2N" firstAttribute="trailing" secondItem="iVd-Ri-g55" secondAttribute="trailingMargin" id="OJt-Kf-ZGm"/>
                             <constraint firstItem="Trd-cc-Zjj" firstAttribute="top" secondItem="LHK-Ba-7b7" secondAttribute="bottom" constant="8" id="ORO-xi-1gX"/>
+                            <constraint firstItem="R4N-TT-Tcf" firstAttribute="leading" secondItem="iVd-Ri-g55" secondAttribute="leadingMargin" id="Ra9-Wv-FT5"/>
                             <constraint firstItem="LHK-Ba-7b7" firstAttribute="leading" secondItem="iVd-Ri-g55" secondAttribute="leadingMargin" id="Xtv-QP-2fQ"/>
                             <constraint firstItem="jNe-X5-b2N" firstAttribute="top" secondItem="mPg-t2-VLc" secondAttribute="bottom" id="cAE-RH-CvI"/>
+                            <constraint firstItem="BxE-NJ-3jU" firstAttribute="top" secondItem="R4N-TT-Tcf" secondAttribute="bottom" constant="8" id="ghS-0m-I2Z"/>
+                            <constraint firstItem="BxE-NJ-3jU" firstAttribute="leading" secondItem="iVd-Ri-g55" secondAttribute="leadingMargin" id="mBR-Bn-dI3"/>
+                            <constraint firstItem="R4N-TT-Tcf" firstAttribute="top" secondItem="Trd-cc-Zjj" secondAttribute="bottom" constant="8" id="nvA-z3-kVA"/>
                             <constraint firstItem="LHK-Ba-7b7" firstAttribute="top" secondItem="jNe-X5-b2N" secondAttribute="bottom" constant="14" id="o8d-dr-kxQ"/>
+                            <constraint firstItem="TBH-qS-qOf" firstAttribute="top" secondItem="BxE-NJ-3jU" secondAttribute="bottom" id="wcw-aw-YpN"/>
                         </constraints>
                     </view>
                     <connections>
@@ -242,4 +258,7 @@
             <point key="canvasLocation" x="235" y="335"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="analyzeImageDemo" width="451" height="315"/>
+    </resources>
 </document>

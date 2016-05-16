@@ -63,12 +63,13 @@ class AnalyzeImage: NSObject {
     */
     enum AnalyzeImageVisualFeatures: String {
         case None = ""
+        case Categories = "Categories"
+        case Tags = "Tags"
+        case Description = "Description"
+        case Faces = "Faces"
         case ImageType = "ImageType"
         case Color = "Color"
-        case Faces = "Faces"
         case Adult = "Adult"
-        case Categories = "Categories"
-        case All = "All"
     }
     
     
@@ -80,13 +81,6 @@ class AnalyzeImage: NSObject {
     */
     enum AnalyzeImageDetails: String {
         case None = ""
-        case ImageType = "ImageType"
-        case Celebrities = "Celebrities"
-        case Faces = "Faces"
-        case Adult = "Adult"
-        case Categories = "Categories"
-        case Color = "Color"
-        case Tags = "Tags"
         case Description = "Description"
     }
  
@@ -94,14 +88,14 @@ class AnalyzeImage: NSObject {
     /**
      This operation extracts a rich set of visual features based on the image content.
      
-     - parameter imageUrl: The Url of the image
+     - parameter imageUrl: The Url path of the image
      - parameter visualFeatures, details: Read more about those [here](https://dev.projectoxford.ai/docs/services/56f91f2d778daf23d8ec6739/operations/56f91f2e778daf14a499e1fa)
      - parameter completion: Once the request has been performed the response is returend as a JSON Object in the completion block.
      */
-    func analyzeImageOnURL(imageURL: String, visualFeatures: AnalyzeImageVisualFeatures = .All, completion: (response: [String : AnyObject]?) -> Void) throws {
+    func analyzeImageOnURL(imageURL: String, visualFeatures: AnalyzeImageVisualFeatures = .Categories, completion: (response: [String : AnyObject]?) -> Void) throws {
 
         //Query parameters
-        let parameters = ["entities=true", "visualFeature=\(visualFeatures.rawValue)"].joinWithSeparator("&")
+        let parameters = ["entities=true", "visualFeatures=\(visualFeatures.rawValue)"].joinWithSeparator("&")
         let requestURL = NSURL(string: url + "?" + parameters)!
         
         let request = NSMutableURLRequest(URL: requestURL)
@@ -132,5 +126,56 @@ class AnalyzeImage: NSObject {
         task.resume()
     
     }
+  
+    
+    
+    /**
+     This operation extracts a rich set of visual features based on the image content.
+     
+     - parameter imageUrl: The Url path of the image
+     - parameter visualFeatures, details: Read more about those [here](https://dev.projectoxford.ai/docs/services/56f91f2d778daf23d8ec6739/operations/56f91f2e778daf14a499e1fa)
+     - parameter completion: Once the request has been performed the response is returend as a JSON Object in the completion block.
+     */
+    func analyzeImage(imageData: NSData, visualFeatures: AnalyzeImageVisualFeatures = .Categories, completion: (response: [String : AnyObject]?) -> Void) throws {
+        
+        //Query parameters
+        let parameters = ["entities=true", "visualFeatures=\(visualFeatures.rawValue)"].joinWithSeparator("&")
+        let requestURL = NSURL(string: url + "?" + parameters)!
+        
+        let request = NSMutableURLRequest(URL: requestURL)
+        request.HTTPMethod = "POST"
+        
+        // Request headers
+        request.setValue("application/octet-stream", forHTTPHeaderField: "Content-Type")
+        request.setValue(key, forHTTPHeaderField: "Ocp-Apim-Subscription-Key")
+        
+        // Request body
+        request.HTTPBody = imageData
+        
+        let task = NSURLSession.sharedSession().dataTaskWithRequest(request){ data, response, error in
+            if error != nil{
+                print("Error -> \(error)")
+                completion(response: nil)
+                return
+            }else{
+                let results = try! NSJSONSerialization.JSONObjectWithData(data!, options: []) as? [String:AnyObject]
+                
+                // Hand dict over
+                dispatch_async(dispatch_get_main_queue()) {
+                    completion(response: results)
+                }
+            }
+            
+        }
+        task.resume()
+        
+    }
+
+    
+    
+    func extractDescriptionFromDictionary(dictionary: [String: AnyObject]) -> [String] {
+        return [String]()
+    }
+    
     
 }

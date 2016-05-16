@@ -23,6 +23,17 @@ class AnalyzeImageViewController: UIViewController {
         }
         
     }
+
     
+    @IBAction func analyzeImageDidPush(sender: AnyObject) {
+        
+        let image = UIImagePNGRepresentation(UIImage(named: "analyzeImageDemo")!)!
+        
+        let analyzeImage = CognitiveServices.sharedInstance.analyzeImage
+        try! analyzeImage.analyzeImage(image, visualFeatures: .Description, completion: { (response) in
+            self.textView.text = response?.description
+        })
+        
+    }
 
 }
