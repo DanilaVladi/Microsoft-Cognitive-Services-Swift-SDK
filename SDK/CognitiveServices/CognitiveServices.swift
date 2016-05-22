@@ -16,7 +16,7 @@
 
 
 
-import UIKit
+import Foundation
 
 
 /** WARNING: - Put your own keys in here
@@ -67,6 +67,6 @@ enum CognitiveServicesApiKeys: String {
 class CognitiveServices: NSObject {
     static let sharedInstance = CognitiveServices()
     
-    let ocr = OcrComputerVision()
+    let ocr = OCR()
     let analyzeImage = AnalyzeImage()
 }

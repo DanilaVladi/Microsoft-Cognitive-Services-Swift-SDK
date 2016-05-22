@@ -28,31 +28,27 @@ class OCRViewController: UIViewController {
     
 
     @IBAction func textFromUrlDidPush(sender: UIButton) {
-        do {
-            try ocr.recognizeCharactersOnImageUrl(urlTextField.text!, language: .Automatic) { (response) in
+        let requestObject: OCRRequestObject = (resource: urlTextField.text!, language: .Automatic, detectOrientation: true)
+        try! ocr.recognizeCharactersWithRequestObject(requestObject, completion: { (response) in
             
-                let string = self.ocr.extractStringFromDictionary(response)
-                self.resultTextView.text = string
-                
-            }
-        } catch {
-            print("Something went wrong")
-        }
+            let text = self.ocr.extractStringFromDictionary(response!)
+            self.resultTextView.text = text
+            
+        })
+
     }
     
     
     @IBAction func textFromImageDidPush(sender: UIButton) {
-        do {
-            try ocr.recognizeCharactersOnImageData(UIImagePNGRepresentation(UIImage(named: "ocrDemo")!)!, language: .Automatic, completion: { (response) in
-                
-                let string = self.ocr.extractStringFromDictionary(response!)
-                self.resultTextView.text = string
+        
+        let requestObject: OCRRequestObject = (resource: UIImagePNGRepresentation(UIImage(named: "ocrDemo")!)!, language: .Automatic, detectOrientation: true)
+        try! ocr.recognizeCharactersWithRequestObject(requestObject, completion: { (response) in
+            
+            let text = self.ocr.extractStringFromDictionary(response!)
+            self.resultTextView.text = text
+            
+        })
 
-                
-            })
-        } catch {
-            print("Something went wrong")
-        }
     }
 
     

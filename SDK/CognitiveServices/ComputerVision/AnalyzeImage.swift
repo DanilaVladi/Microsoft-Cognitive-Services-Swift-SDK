@@ -15,25 +15,88 @@
 //  limitations under the License.
 
 
+import Foundation
+import CoreGraphics
 import UIKit
+
+/**
+ RequestObject is the required parameter for the AnalyzeImage API containing all required information to perform a request
+ - parameter resource: The path or data of the image or
+ - parameter visualFeatures, details: Read more about those [here](https://dev.projectoxford.ai/docs/services/56f91f2d778daf23d8ec6739/operations/56f91f2e778daf14a499e1fa)
+ */
+typealias AnalyzeImageRequestObject = (resource: AnyObject, visualFeatures: [AnalyzeImage.AnalyzeImageVisualFeatures])
+
 
 /**
  Analyze Image
  
-This operation extracts a rich set of visual features based on the image content. 
+ This operation extracts a rich set of visual features based on the image content.
  
  - You can try Image Analysation here: https://www.microsoft.com/cognitive-services/en-us/computer-vision-api
  
  */
 class AnalyzeImage: NSObject {
-
+    
+    
+    class AnalyzeImageObject {
+        
+        // Categories
+        var categories: [[String : AnyObject]]?
+        
+        // Faces
+        var faces: [FaceObject]? = []
+        
+        // Metadata
+        var rawMetaData: [String : AnyObject]?
+        var imageSize: CGSize?
+        var imageFormat: String?
+        
+        // ImageType
+        var imageType: (clipArtType: Int?, lineDrawingType: Int?)?
+        
+        
+        // Description
+        var rawDescription: [String : AnyObject]?
+        var rawDescriptionCaptions: [String : AnyObject]?
+        var descriptionText: String?
+        var descriptionTextConfidence: Float?
+        var tags: [String]?
+        
+        // Color
+        var blackAndWhite: Bool?
+        var dominantColors: [String]?
+        var accentColorHex: String?
+        var dominantForegroundColor: String?
+        var dominantBackgroundColor: String?
+        
+        
+        var isAdultContent: Bool?
+        var adultScore: Float?
+        var isRacyContent: Bool?
+        var racyContentScore: Float?
+        
+        
+        var rawDict: [String : AnyObject]?
+        var requestID: String?
+        
+        
+        // Intern Object classes
+        struct FaceObject {
+            let age: Int?
+            let gender: String?
+            let faceRectangle: CGRect?
+        }
+        
+    }
+    
+    
     /// The url to perform the requests on
     let url = "https://api.projectoxford.ai/vision/v1.0/analyze"
     
     /// Your private API key. If you havn't changed it yet, go ahead!
     let key = CognitiveServicesApiKeys.ComputerVision.rawValue
-
-    enum AnalyseImageErros: ErrorType {
+    
+    enum AnalyzeImageErros: ErrorType {
         
         case ImageUrlWrongFormatted
         
@@ -44,7 +107,7 @@ class AnalyzeImage: NSObject {
         case NotSupportedVisualFeature
         case NotSupportedImage
         case InvalidDetails
-
+        
         // Response 415
         case InvalidMediaType
         
@@ -59,8 +122,8 @@ class AnalyzeImage: NSObject {
     /**
      Used as a parameter for `recognizeCharactersOnImageUrl`
      
-    Read more about it [here](https://dev.projectoxford.ai/docs/services/56f91f2d778daf23d8ec6739/operations/56f91f2e778daf14a499e1fa)
-    */
+     Read more about it [here](https://dev.projectoxford.ai/docs/services/56f91f2d778daf23d8ec6739/operations/56f91f2e778daf14a499e1fa)
+     */
     enum AnalyzeImageVisualFeatures: String {
         case None = ""
         case Categories = "Categories"
@@ -75,94 +138,72 @@ class AnalyzeImage: NSObject {
     
     
     /**
-    Used as a parameter for `recognizeCharactersOnImageUrl`
-    
-    Read more about it [here](https://dev.projectoxford.ai/docs/services/56f91f2d778daf23d8ec6739/operations/56f91f2e778daf14a499e1fa)
-    */
+     Used as a parameter for `recognizeCharactersOnImageUrl`
+     
+     Read more about it [here](https://dev.projectoxford.ai/docs/services/56f91f2d778daf23d8ec6739/operations/56f91f2e778daf14a499e1fa)
+     */
     enum AnalyzeImageDetails: String {
         case None = ""
         case Description = "Description"
     }
- 
+    
+    
     
     /**
      This operation extracts a rich set of visual features based on the image content.
-     
-     - parameter imageUrl: The Url path of the image
-     - parameter visualFeatures, details: Read more about those [here](https://dev.projectoxford.ai/docs/services/56f91f2d778daf23d8ec6739/operations/56f91f2e778daf14a499e1fa)
-     - parameter completion: Once the request has been performed the response is returend as a JSON Object in the completion block.
+     - parameter requestObject: The required information required to perform a request
+     - parameter completion: Once the request has been performed the response is returend as a Dictionary in the completion block.
      */
-    func analyzeImageOnURL(imageURL: String, visualFeatures: AnalyzeImageVisualFeatures = .Categories, completion: (response: [String : AnyObject]?) -> Void) throws {
-
+    func analyzeImageWithRequestObject(requestObject: AnalyzeImageRequestObject, completion: (response: AnalyzeImageObject?) -> Void) throws {
+        
         //Query parameters
-        let parameters = ["entities=true", "visualFeatures=\(visualFeatures.rawValue)"].joinWithSeparator("&")
+        let visualFeatures = requestObject.visualFeatures
+            .map {$0.rawValue}
+            .joinWithSeparator(",")
+        
+        let parameters = ["visualFeatures=\(visualFeatures)"].joinWithSeparator("&")
         let requestURL = NSURL(string: url + "?" + parameters)!
         
         let request = NSMutableURLRequest(URL: requestURL)
         request.HTTPMethod = "POST"
-
-        // Request headers
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.setValue(key, forHTTPHeaderField: "Ocp-Apim-Subscription-Key")
         
-        // Request body
-        request.HTTPBody = "{\"url\":\"\(imageURL)\"}".dataUsingEncoding(NSUTF8StringEncoding)
-        
-        let task = NSURLSession.sharedSession().dataTaskWithRequest(request){ data, response, error in
-            if error != nil{
-                print("Error -> \(error)")
-                completion(response: nil)
-                return
-            }else{
-                let results = try! NSJSONSerialization.JSONObjectWithData(data!, options: []) as? [String:AnyObject]
-                
-                // Hand dict over
-                dispatch_async(dispatch_get_main_queue()) {
-                    completion(response: results)
-                }
-            }
-            
+        // Request Parameter
+        if let path = requestObject.resource as? String {
+            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            request.HTTPBody = "{\"url\":\"\(path)\"}".dataUsingEncoding(NSUTF8StringEncoding)
         }
-        task.resume()
-    
-    }
-  
-    
-    
-    /**
-     This operation extracts a rich set of visual features based on the image content.
-     
-     - parameter imageUrl: The Url path of the image
-     - parameter visualFeatures, details: Read more about those [here](https://dev.projectoxford.ai/docs/services/56f91f2d778daf23d8ec6739/operations/56f91f2e778daf14a499e1fa)
-     - parameter completion: Once the request has been performed the response is returend as a JSON Object in the completion block.
-     */
-    func analyzeImage(imageData: NSData, visualFeatures: AnalyzeImageVisualFeatures = .Categories, completion: (response: [String : AnyObject]?) -> Void) throws {
+        else if let imageData = requestObject.resource as? NSData {
+            request.setValue("application/octet-stream", forHTTPHeaderField: "Content-Type")
+            request.HTTPBody = imageData
+        }
+        else if let imageData = requestObject.resource as? UIImage {
+            request.setValue("application/octet-stream", forHTTPHeaderField: "Content-Type")
+            request.HTTPBody = UIImageJPEGRepresentation(imageData, 0.7)
+        }
+        else {
+            throw AnalyzeImageErros.InvalidImageFormat
+        }
         
-        //Query parameters
-        let parameters = ["entities=true", "visualFeatures=\(visualFeatures.rawValue)"].joinWithSeparator("&")
-        let requestURL = NSURL(string: url + "?" + parameters)!
-        
-        let request = NSMutableURLRequest(URL: requestURL)
-        request.HTTPMethod = "POST"
-        
-        // Request headers
-        request.setValue("application/octet-stream", forHTTPHeaderField: "Content-Type")
         request.setValue(key, forHTTPHeaderField: "Ocp-Apim-Subscription-Key")
         
-        // Request body
-        request.HTTPBody = imageData
+        let started = NSDate()
         
         let task = NSURLSession.sharedSession().dataTaskWithRequest(request){ data, response, error in
             if error != nil{
                 print("Error -> \(error)")
                 completion(response: nil)
                 return
-            }else{
+            } else {
+                
                 let results = try! NSJSONSerialization.JSONObjectWithData(data!, options: []) as? [String:AnyObject]
+                let analyzeObject = self.objectFromDict(results)
+                
+                let interval = NSDate().timeIntervalSinceDate(started)
+                print(interval)
                 
                 // Hand dict over
                 dispatch_async(dispatch_get_main_queue()) {
-                    completion(response: results)
+                    completion(response: analyzeObject)
                 }
             }
             
@@ -170,12 +211,98 @@ class AnalyzeImage: NSObject {
         task.resume()
         
     }
-
     
     
-    func extractDescriptionFromDictionary(dictionary: [String: AnyObject]) -> [String] {
-        return [String]()
+    private func objectFromDict(dict: [String : AnyObject]?) -> AnalyzeImageObject {
+        let analyzeObject = AnalyzeImageObject()
+        
+        analyzeObject.rawDict = dict
+        
+        if let categories = dict?["categories"] as? [[String : AnyObject]] {
+            analyzeObject.categories = categories
+        }
+        
+        
+        if let faces = dict?["faces"] as? [[String : AnyObject]] {
+            faces.forEach({ faceDict in
+                let age = faceDict["age"] as? Int
+                let gender = faceDict["gender"] as? String
+                let faceRect = faceDict["faceRectangle"] as? [String : CGFloat]
+                
+                
+                var rect: CGRect? {
+                    if let left = faceRect?["left"],
+                        let top = faceRect?["top"],
+                        let width = faceRect?["width"],
+                        let height = faceRect?["height"] {
+                        
+                        return CGRectMake(left, top, width, height)
+                    }
+                    
+                    return nil
+                }
+                
+                
+                let face = AnalyzeImageObject.FaceObject(age: age,
+                    gender: gender,
+                    faceRectangle: rect
+                )
+                
+                analyzeObject.faces?.append(face)
+            })
+            
+            
+        }
+        
+        
+        analyzeObject.requestID = dict?["requestId"] as? String
+        
+        
+        // Medadata values
+        if let metaData = dict?["metadata"] as? [String : AnyObject] {
+            analyzeObject.rawMetaData = metaData
+            
+            if let width = metaData["width"] as? CGFloat,
+                let height = metaData["height"] as? CGFloat {
+                
+                analyzeObject.imageSize = CGSizeMake(width, height)
+            }
+            
+            analyzeObject.imageFormat = metaData["format"] as? String
+        }
+        
+        
+        if let imageType = dict?["imageType"] as? [String : Int] {
+            analyzeObject.imageType = (imageType["clipArtType"], imageType["lineDrawingType"])
+        }
+        
+        // Description values
+        if let description = dict?["description"] as? [String : AnyObject] {
+            
+            analyzeObject.rawDescription = description
+            analyzeObject.tags = description["tags"] as? [String]
+            
+            // Captions values
+            if let captionsRaw = description["captions"] as? NSArray {
+                let captions = captionsRaw.firstObject as? [String : AnyObject]
+                analyzeObject.rawDescriptionCaptions = captions
+                
+                analyzeObject.descriptionText = captions?["text"] as? String
+            }
+            
+        }
+        
+        
+        if let color = dict?["color"] as? [String : AnyObject] {
+            analyzeObject.blackAndWhite = color["isBWImg"] as? Bool
+            analyzeObject.dominantForegroundColor = color["dominantColorForeground"] as? String
+            analyzeObject.dominantBackgroundColor = color["dominantColorBackground"] as? String
+            analyzeObject.dominantColors = color["dominantColors"] as? [String]
+            analyzeObject.accentColorHex = color["accentColor"] as? String
+        }
+        
+        
+        return analyzeObject
     }
-    
     
 }

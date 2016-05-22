@@ -13,27 +13,34 @@ class AnalyzeImageViewController: UIViewController {
     @IBOutlet var textView: UITextView!
     @IBOutlet var urlTextField: UITextField!
     
+    @IBOutlet var imageView: UIImageView!
     
     @IBAction func analyzeFromURLDidPush(sender: AnyObject) {
         
         let analyzeImage = CognitiveServices.sharedInstance.analyzeImage
+        let visualFeatures: [AnalyzeImage.AnalyzeImageVisualFeatures] = [.Categories, .Description, .Faces, .ImageType, .Color, .Adult]
+        let requestObject: AnalyzeImageRequestObject = (urlTextField.text!, visualFeatures)
         
-        try! analyzeImage.analyzeImageOnURL(urlTextField.text!) { response in
-            self.textView.text = response!.description
-        }
+        try! analyzeImage.analyzeImageWithRequestObject(requestObject, completion: { (response) in
+            self.textView.text = response?.descriptionText
+        })
+        
         
     }
 
     
     @IBAction func analyzeImageDidPush(sender: AnyObject) {
         
-        let image = UIImagePNGRepresentation(UIImage(named: "analyzeImageDemo")!)!
         
         let analyzeImage = CognitiveServices.sharedInstance.analyzeImage
-        try! analyzeImage.analyzeImage(image, visualFeatures: .Description, completion: { (response) in
-            self.textView.text = response?.description
-        })
+
+        let visualFeatures: [AnalyzeImage.AnalyzeImageVisualFeatures] = [.Categories, .Description, .Faces, .ImageType, .Color, .Adult]
+        let requestObject: AnalyzeImageRequestObject = (imageView.image!, visualFeatures)
         
+        try! analyzeImage.analyzeImageWithRequestObject(requestObject, completion: { (response) in
+            self.textView.text = response?.descriptionText
+        })
+
     }
 
 }

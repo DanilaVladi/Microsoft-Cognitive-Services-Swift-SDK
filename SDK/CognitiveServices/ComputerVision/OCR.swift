@@ -15,7 +15,15 @@
 //  limitations under the License.
 
 
-import UIKit
+import Foundation
+
+
+/**
+ RequestObject is the required parameter for the OCR API containing all required information to perform a request
+ - parameter resource: The path or data of the image or
+ - parameter language, detectOrientation: Read more about those [here](https://dev.projectoxford.ai/docs/services/56f91f2d778daf23d8ec6739/operations/56f91f2e778daf14a499e1fa)
+ */
+typealias OCRRequestObject = (resource: AnyObject, language: OCR.Langunages, detectOrientation: Bool)
 
 
 /**
@@ -26,8 +34,8 @@ import UIKit
  - You can try OCR here: https://www.microsoft.com/cognitive-services/en-us/computer-vision-api
  
  */
-class OcrComputerVision: NSObject {
-
+class OCR: NSObject {
+    
     /// The url to perform the requests on
     let url = "https://api.projectoxford.ai/vision/v1.0/ocr"
     
@@ -69,80 +77,32 @@ class OcrComputerVision: NSObject {
     }
     
     
-    
-    
-    
     /**
      Optical Character Recognition (OCR) detects text in an image and extracts the recognized characters into a machine-usable character stream.
-     
-     - parameter imageUrl: The Url of the image
+     - parameter requestObject: The required information required to perform a request
      - parameter language: The languange
      - parameter completion: Once the request has been performed the response is returend in the completion block.
      */
-    func recognizeCharactersOnImageUrl(imageUrl: String, language: Langunages, detectOrientation: Bool = true, completion: (response: [String:AnyObject] ) -> Void) throws {
+    func recognizeCharactersWithRequestObject(requestObject: OCRRequestObject, completion: (response: [String:AnyObject]? ) -> Void) throws {
         
         // Generate the url
-        let requestUrlString = url + "?language=" + language.rawValue + "&detectOrientation%20=\(detectOrientation)"
-        let requestUrl = NSURL(string: requestUrlString)
-        
-        // Set the request headers
-        let headers: [String : String] = [
-            "Content-Type" : "application/json",
-            "Ocp-Apim-Subscription-Key" : key
-        ]
-        
-        // Check if 'imageUrl' is formatted as an url
-        guard let _ = NSURL(string: imageUrl) else {
-            throw RecognizeCharactersErrors.ImageUrlWrongFormatted
-        }
-        
-        
-        // Set the request parameters
-        let parameters: [String : AnyObject] = [
-            "url" : imageUrl
-        ]
-        
-        
-        // Perform the request
-        request(.POST, requestUrl!, headers: headers, parameters: parameters, encoding: .JSON)
-        .responseData { response in
-            
-            // Check if data is empty
-            guard let data = response.data else {
-                return
-            }
-            
-            
-            let responseDictionary = data.convertJSONToDictionary()
-            
-            completion(response: responseDictionary!)
-            
-        }
-        
-    }
-  
-    
-    // TODO: - Implementation Missing
-    
-    
-    /**
-     Optical Character Recognition (OCR) detects text in an image and extracts the recognized characters into a machine-usable character stream.
-     
-     - parameter imageData: The data of the image
-     - parameter language: The languange
-     - parameter completion: Once the request has been performed the response is returend in the completion block.
-     */
-    func recognizeCharactersOnImageData(imageData: NSData, language: Langunages, detectOrientation: Bool = true, completion: (response: [String:AnyObject]? ) -> Void) throws {
-
-        // Generate the url
-        let requestUrlString = url + "?language=" + language.rawValue + "&detectOrientation%20=\(detectOrientation)"
+        let requestUrlString = url + "?language=" + requestObject.language.rawValue + "&detectOrientation%20=\(requestObject.detectOrientation)"
         let requestUrl = NSURL(string: requestUrlString)
         
         
         let request = NSMutableURLRequest(URL: requestUrl!)
-        request.setValue("application/octet-stream", forHTTPHeaderField: "Content-Type")
         request.setValue(key, forHTTPHeaderField: "Ocp-Apim-Subscription-Key")
-        request.HTTPBody = imageData
+        
+        // Request Parameter
+        if let path = requestObject.resource as? String {
+            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            request.HTTPBody = "{\"url\":\"\(path)\"}".dataUsingEncoding(NSUTF8StringEncoding)
+        }
+        else if let imageData = requestObject.resource as? NSData {
+            request.setValue("application/octet-stream", forHTTPHeaderField: "Content-Type")
+            request.HTTPBody = imageData
+        }
+        
         request.HTTPMethod = "POST"
         
         let task = NSURLSession.sharedSession().dataTaskWithRequest(request){ data, response, error in
@@ -161,24 +121,22 @@ class OcrComputerVision: NSObject {
             
         }
         task.resume()
-
+        
     }
-        
-        
-        
     
-
+    
+    
+    
+    
     /**
      Returns an Array of Strings extracted from the Dictionary generated from `recognizeCharactersOnImageUrl()`
-     
-     - Parameter dictionary:   The Dictionary created by `recognizeCharactersOnImageUrl()`.
-     
+     - Parameter dictionary: The Dictionary created by `recognizeCharactersOnImageUrl()`.
      - Returns: An String Array extracted from the Dictionary.
      */
     func extractStringsFromDictionary(dictionary: [String : AnyObject]) -> [String] {
         
         // Get Regions from the dictionary
-        let regions = (dictionary["regions"] as! NSArray)[0] as? [String:AnyObject]
+        let regions = (dictionary["regions"] as! NSArray).firstObject as? [String:AnyObject]
         
         // Get lines from the regions dictionary
         let lines = regions!["lines"] as! NSArray
@@ -194,9 +152,7 @@ class OcrComputerVision: NSObject {
     
     /**
      Returns a String extracted from the Dictionary generated from `recognizeCharactersOnImageUrl()`
-     
-     - Parameter dictionary:   The Dictionary created by `recognizeCharactersOnImageUrl()`.
-     
+     - Parameter dictionary: The Dictionary created by `recognizeCharactersOnImageUrl()`.
      - Returns: A String extracted from the Dictionary.
      */
     func extractStringFromDictionary(dictionary: [String:AnyObject]) -> String {
