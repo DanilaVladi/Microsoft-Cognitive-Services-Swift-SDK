@@ -58,7 +58,7 @@ For questions, feedback, or suggestions about the SDK, feel free to get in touch
 Progress
 ========
 
-##### Vision (40%)
+##### Vision (47%)
 -  **[Computer Vision APIs](<https://www.microsoft.com/cognitive-services/en-us/computer-vision-api>) (Preview):** Distill actionable information from images
 -  **[Emotion APIs](<https://www.microsoft.com/cognitive-services/en-us/emotion-api>) (Preview):** Personalize experiences with emotion recognition
 -  **[Face APIs](<https://www.microsoft.com/cognitive-services/en-us/face-api>) (Preview):** Detect, identify, analyze, organize, and tag faces in photos
