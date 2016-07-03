@@ -70,10 +70,10 @@ class OCR: NSObject {
     }
     
     
-    enum RecognizeCharactersErrors: ErrorType {
-        case UnknownError
-        case ImageUrlWrongFormatted
-        case EmptyDictionary
+    enum RecognizeCharactersErrors: ErrorProtocol {
+        case unknownError
+        case imageUrlWrongFormatted
+        case emptyDictionary
     }
     
     
@@ -83,43 +83,50 @@ class OCR: NSObject {
      - parameter language: The languange
      - parameter completion: Once the request has been performed the response is returend in the completion block.
      */
-    func recognizeCharactersWithRequestObject(requestObject: OCRRequestObject, completion: (response: [String:AnyObject]? ) -> Void) throws {
+    func recognizeCharactersWithRequestObject(_ requestObject: OCRRequestObject, completion: (response: [String:AnyObject]? ) -> Void) throws {
         
         // Generate the url
         let requestUrlString = url + "?language=" + requestObject.language.rawValue + "&detectOrientation%20=\(requestObject.detectOrientation)"
-        let requestUrl = NSURL(string: requestUrlString)
+        let requestUrl = URL(string: requestUrlString)
         
         
-        let request = NSMutableURLRequest(URL: requestUrl!)
+        var request = URLRequest(url: requestUrl!)
         request.setValue(key, forHTTPHeaderField: "Ocp-Apim-Subscription-Key")
         
         // Request Parameter
         if let path = requestObject.resource as? String {
             request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-            request.HTTPBody = "{\"url\":\"\(path)\"}".dataUsingEncoding(NSUTF8StringEncoding)
+            request.httpBody = "{\"url\":\"\(path)\"}".data(using: String.Encoding.utf8)
         }
-        else if let imageData = requestObject.resource as? NSData {
+        else if let imageData = requestObject.resource as? Data {
             request.setValue("application/octet-stream", forHTTPHeaderField: "Content-Type")
-            request.HTTPBody = imageData
+            request.httpBody = imageData
         }
         
-        request.HTTPMethod = "POST"
+        request.httpMethod = "POST"
+
         
-        let task = NSURLSession.sharedSession().dataTaskWithRequest(request){ data, response, error in
-            if error != nil{
-                print("Error -> \(error)")
-                completion(response: nil)
-                return
-            }else{
-                let results = try! NSJSONSerialization.JSONObjectWithData(data!, options: []) as? [String:AnyObject]
-                
-                // Hand dict over
-                dispatch_async(dispatch_get_main_queue()) {
-                    completion(response: results)
-                }
-            }
+        let task = URLSession.shared().dataTask(with: request) { (data, response, error) in
             
         }
+//        
+//        
+//        
+//        let task = URLSession.shared().dataTask(with: request){ data, response, error in
+//            if error != nil{
+//                print("Error -> \(error)")
+//                completion(response: nil)
+//                return
+//            }else{
+//                let results = try! JSONSerialization.jsonObject(with: data!, options: []) as? [String:AnyObject]
+//                
+//                // Hand dict over
+//                DispatchQueue.main.async {
+//                    completion(response: results)
+//                }
+//            }
+//            
+//        }
         task.resume()
         
     }
@@ -133,7 +140,7 @@ class OCR: NSObject {
      - Parameter dictionary: The Dictionary created by `recognizeCharactersOnImageUrl()`.
      - Returns: An String Array extracted from the Dictionary.
      */
-    func extractStringsFromDictionary(dictionary: [String : AnyObject]) -> [String] {
+    func extractStringsFromDictionary(_ dictionary: [String : AnyObject]) -> [String] {
         
         // Get Regions from the dictionary
         let regions = (dictionary["regions"] as! NSArray).firstObject as? [String:AnyObject]
@@ -142,10 +149,10 @@ class OCR: NSObject {
         let lines = regions!["lines"] as! NSArray
         
         // Get words from lines
-        let inLine = lines.enumerate().map {$0.element["words"] as! [[String : AnyObject]] }
+        let inLine = lines.enumerated().map {$0.element["words"] as! [[String : AnyObject]] }
         
         // Get text from words
-        let extractedText = inLine.enumerate().map { $0.element[0]["text"] as! String}
+        let extractedText = inLine.enumerated().map { $0.element[0]["text"] as! String}
         
         return extractedText
     }
@@ -155,13 +162,13 @@ class OCR: NSObject {
      - Parameter dictionary: The Dictionary created by `recognizeCharactersOnImageUrl()`.
      - Returns: A String extracted from the Dictionary.
      */
-    func extractStringFromDictionary(dictionary: [String:AnyObject]) -> String {
+    func extractStringFromDictionary(_ dictionary: [String:AnyObject]) -> String {
         
         let stringArray = extractStringsFromDictionary(dictionary)
         
-        let reducedArray = stringArray.enumerate().reduce("", combine:
+        let reducedArray = stringArray.enumerated().reduce("", combine:
             {
-                $0 + $1.element + ($1.index < stringArray.endIndex-1 ? " " : "")
+                $0 + $1.element + ($1.offset < stringArray.endIndex-1 ? " " : "")
             }
         )
         return reducedArray

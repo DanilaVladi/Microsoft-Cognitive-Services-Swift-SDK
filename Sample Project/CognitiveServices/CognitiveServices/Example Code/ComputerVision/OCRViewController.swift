@@ -27,7 +27,7 @@ class OCRViewController: UIViewController {
     }
     
 
-    @IBAction func textFromUrlDidPush(sender: UIButton) {
+    @IBAction func textFromUrlDidPush(_ sender: UIButton) {
         let requestObject: OCRRequestObject = (resource: urlTextField.text!, language: .Automatic, detectOrientation: true)
         try! ocr.recognizeCharactersWithRequestObject(requestObject, completion: { (response) in
             
@@ -39,7 +39,7 @@ class OCRViewController: UIViewController {
     }
     
     
-    @IBAction func textFromImageDidPush(sender: UIButton) {
+    @IBAction func textFromImageDidPush(_ sender: UIButton) {
         
         let requestObject: OCRRequestObject = (resource: UIImagePNGRepresentation(UIImage(named: "ocrDemo")!)!, language: .Automatic, detectOrientation: true)
         try! ocr.recognizeCharactersWithRequestObject(requestObject, completion: { (response) in

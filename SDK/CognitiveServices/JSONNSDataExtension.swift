@@ -16,12 +16,12 @@
 
 import Foundation
 
-extension NSData {
+extension Data {
 
     func convertJSONToDictionary() -> [String:AnyObject]? {
         
         do {
-            let json = try NSJSONSerialization.JSONObjectWithData(self, options: .MutableContainers) as? [String:AnyObject]
+            let json = try JSONSerialization.jsonObject(with: self, options: .mutableContainers) as? [String:AnyObject]
             return json!
         } catch {
             print("Something went wrong")

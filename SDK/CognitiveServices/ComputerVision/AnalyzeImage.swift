@@ -96,25 +96,25 @@ class AnalyzeImage: NSObject {
     /// Your private API key. If you havn't changed it yet, go ahead!
     let key = CognitiveServicesApiKeys.ComputerVision.rawValue
     
-    enum AnalyzeImageErros: ErrorType {
+    enum AnalyzeImageErros: ErrorProtocol {
         
-        case ImageUrlWrongFormatted
+        case imageUrlWrongFormatted
         
         // Response 400
-        case InvalidImageUrl
-        case InvalidImageFormat
-        case InvalidImageSize
-        case NotSupportedVisualFeature
-        case NotSupportedImage
-        case InvalidDetails
+        case invalidImageUrl
+        case invalidImageFormat
+        case invalidImageSize
+        case notSupportedVisualFeature
+        case notSupportedImage
+        case invalidDetails
         
         // Response 415
-        case InvalidMediaType
+        case invalidMediaType
         
         // Response 500
-        case FailedToProcess
-        case Timeout
-        case InternalServerError
+        case failedToProcess
+        case timeout
+        case internalServerError
     }
     
     
@@ -154,55 +154,55 @@ class AnalyzeImage: NSObject {
      - parameter requestObject: The required information required to perform a request
      - parameter completion: Once the request has been performed the response is returend as a Dictionary in the completion block.
      */
-    func analyzeImageWithRequestObject(requestObject: AnalyzeImageRequestObject, completion: (response: AnalyzeImageObject?) -> Void) throws {
+    func analyzeImageWithRequestObject(_ requestObject: AnalyzeImageRequestObject, completion: (response: AnalyzeImageObject?) -> Void) throws {
         
         //Query parameters
         let visualFeatures = requestObject.visualFeatures
             .map {$0.rawValue}
-            .joinWithSeparator(",")
+            .joined(separator: ",")
         
-        let parameters = ["visualFeatures=\(visualFeatures)"].joinWithSeparator("&")
-        let requestURL = NSURL(string: url + "?" + parameters)!
+        let parameters = ["visualFeatures=\(visualFeatures)"].joined(separator: "&")
+        let requestURL = URL(string: url + "?" + parameters)!
         
-        let request = NSMutableURLRequest(URL: requestURL)
-        request.HTTPMethod = "POST"
+        var request = URLRequest(url: requestURL)
+        request.httpMethod = "POST"
         
         // Request Parameter
         if let path = requestObject.resource as? String {
             request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-            request.HTTPBody = "{\"url\":\"\(path)\"}".dataUsingEncoding(NSUTF8StringEncoding)
+            request.httpBody = "{\"url\":\"\(path)\"}".data(using: String.Encoding.utf8)
         }
-        else if let imageData = requestObject.resource as? NSData {
+        else if let imageData = requestObject.resource as? Data {
             request.setValue("application/octet-stream", forHTTPHeaderField: "Content-Type")
-            request.HTTPBody = imageData
+            request.httpBody = imageData
         }
         else if let imageData = requestObject.resource as? UIImage {
             request.setValue("application/octet-stream", forHTTPHeaderField: "Content-Type")
-            request.HTTPBody = UIImageJPEGRepresentation(imageData, 0.7)
+            request.httpBody = UIImageJPEGRepresentation(imageData, 0.7)
         }
         else {
-            throw AnalyzeImageErros.InvalidImageFormat
+            throw AnalyzeImageErros.invalidImageFormat
         }
         
         request.setValue(key, forHTTPHeaderField: "Ocp-Apim-Subscription-Key")
         
-        let started = NSDate()
+        let started = Date()
         
-        let task = NSURLSession.sharedSession().dataTaskWithRequest(request){ data, response, error in
+        let task = URLSession.shared().dataTask(with: request){ data, response, error in
             if error != nil{
                 print("Error -> \(error)")
                 completion(response: nil)
                 return
             } else {
                 
-                let results = try! NSJSONSerialization.JSONObjectWithData(data!, options: []) as? [String:AnyObject]
+                let results = try! JSONSerialization.jsonObject(with: data!, options: []) as? [String:AnyObject]
                 let analyzeObject = self.objectFromDict(results)
                 
-                let interval = NSDate().timeIntervalSinceDate(started)
+                let interval = Date().timeIntervalSince(started)
                 print(interval)
                 
                 // Hand dict over
-                dispatch_async(dispatch_get_main_queue()) {
+                DispatchQueue.main.async {
                     completion(response: analyzeObject)
                 }
             }
@@ -213,7 +213,7 @@ class AnalyzeImage: NSObject {
     }
     
     
-    private func objectFromDict(dict: [String : AnyObject]?) -> AnalyzeImageObject {
+    private func objectFromDict(_ dict: [String : AnyObject]?) -> AnalyzeImageObject {
         let analyzeObject = AnalyzeImageObject()
         
         analyzeObject.rawDict = dict
@@ -236,7 +236,7 @@ class AnalyzeImage: NSObject {
                         let width = faceRect?["width"],
                         let height = faceRect?["height"] {
                         
-                        return CGRectMake(left, top, width, height)
+                        return CGRect(x: left, y: top, width: width, height: height)
                     }
                     
                     return nil
@@ -265,7 +265,7 @@ class AnalyzeImage: NSObject {
             if let width = metaData["width"] as? CGFloat,
                 let height = metaData["height"] as? CGFloat {
                 
-                analyzeObject.imageSize = CGSizeMake(width, height)
+                analyzeObject.imageSize = CGSize(width: width, height: height)
             }
             
             analyzeObject.imageFormat = metaData["format"] as? String

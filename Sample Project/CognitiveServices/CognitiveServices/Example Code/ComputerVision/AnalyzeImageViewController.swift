@@ -15,7 +15,7 @@ class AnalyzeImageViewController: UIViewController {
     
     @IBOutlet var imageView: UIImageView!
     
-    @IBAction func analyzeFromURLDidPush(sender: AnyObject) {
+    @IBAction func analyzeFromURLDidPush(_ sender: AnyObject) {
         
         let analyzeImage = CognitiveServices.sharedInstance.analyzeImage
         let visualFeatures: [AnalyzeImage.AnalyzeImageVisualFeatures] = [.Categories, .Description, .Faces, .ImageType, .Color, .Adult]
@@ -29,7 +29,7 @@ class AnalyzeImageViewController: UIViewController {
     }
 
     
-    @IBAction func analyzeImageDidPush(sender: AnyObject) {
+    @IBAction func analyzeImageDidPush(_ sender: AnyObject) {
         
         
         let analyzeImage = CognitiveServices.sharedInstance.analyzeImage

@@ -30,38 +30,53 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     @IBOutlet weak var tableView: UITableView!
     
     
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        let identifier = tableView.cellForRowAtIndexPath(indexPath)!.textLabel!.text!
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let identifier = tableView.cellForRow(at: indexPath)!.textLabel!.text!
         
-        if identifier == "Powered by Microsoft Cognitive Services" {
-            let url = NSURL(string: "https://microsoft.com/cognitive-services/")!
+      
+            
+        switch identifier {
+            
+        case "Powered by Microsoft Cognitive Services":
+            let url = URL(string: "https://microsoft.com/cognitive-services/")!
             if #available(iOS 9.0, *) {
-                let sfViewController = SFSafariViewController(URL: url)
-                self.presentViewController(sfViewController, animated: true, completion: nil)
+                let sfViewController = SFSafariViewController(url: url)
+                self.present(sfViewController, animated: true, completion: nil)
             } else {
-                UIApplication.sharedApplication().openURL(url)
+                UIApplication.shared().openURL(url)
             }
+            
+            
+        case "Analyze Image", "OCR":
+            self.performSegue(withIdentifier: identifier, sender: self)
+            
+            
+        default:
+            let alert = UIAlertController(title: "Missing", message: "This hasn't been implemented yet.", preferredStyle: .alert)
+            let cancelAction = UIAlertAction(title: "Ok", style: .cancel, handler: nil)
+            alert.addAction(cancelAction)
+            self.present(alert, animated: true, completion: nil)
+            tableView.deselectRow(at: indexPath, animated: true)
         }
-        else {
-            self.performSegueWithIdentifier(identifier, sender: self)
-        }
+        
+        
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath) as UITableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as UITableViewCell
         
-        let text = demos[indexPath.row]
+        let text = demos[(indexPath as NSIndexPath).row]
         cell.textLabel?.text = text
 
         
         if text == "Powered by Microsoft Cognitive Services" {
-            cell.accessoryType = .None
-            cell.textLabel?.textColor = .blueColor()
+            cell.accessoryType = .none
+            cell.textLabel?.textColor = .blue()
         }
         else {
-            cell.accessoryType = .DisclosureIndicator
-            cell.textLabel?.textColor = .blackColor()
+            cell.accessoryType = .disclosureIndicator
+            cell.textLabel?.textColor = .black()
         }
         
         return cell
@@ -70,21 +85,21 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     // MARK: - UITableViewDataSource Delegate
     
     
-    let demos = ["Analyze Image","Describe Image","Get Thumbnail","List Domain Specific Model","OCR","Recognize Domain Specfic Content","Tag Image", "Powered by Microsoft Cognitive Services"]
+    let demos = ["Analyze Image","Get Thumbnail","List Domain Specific Model","OCR","Recognize Domain Specfic Content","Tag Image", "Powered by Microsoft Cognitive Services"]
     
     
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return demos.count
     }
 
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        segue.destinationViewController.navigationItem.title = demos[tableView.indexPathForSelectedRow!.row]
-        tableView.deselectRowAtIndexPath(tableView.indexPathForSelectedRow!, animated: true)
+    override func prepare(for segue: UIStoryboardSegue, sender: AnyObject?) {
+        segue.destinationViewController.navigationItem.title = demos[(tableView.indexPathForSelectedRow! as NSIndexPath).row]
+        tableView.deselectRow(at: tableView.indexPathForSelectedRow!, animated: true)
     }
 
 }
