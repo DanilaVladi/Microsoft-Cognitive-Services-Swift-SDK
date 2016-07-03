@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SafariServices
 
 class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
@@ -30,14 +31,38 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        self.performSegueWithIdentifier(tableView.cellForRowAtIndexPath(indexPath)!.textLabel!.text!, sender: self)
+        let identifier = tableView.cellForRowAtIndexPath(indexPath)!.textLabel!.text!
+        
+        if identifier == "Powered by Microsoft Cognitive Services" {
+            let url = NSURL(string: "https://microsoft.com/cognitive-services/")!
+            if #available(iOS 9.0, *) {
+                let sfViewController = SFSafariViewController(URL: url)
+                self.presentViewController(sfViewController, animated: true, completion: nil)
+            } else {
+                UIApplication.sharedApplication().openURL(url)
+            }
+        }
+        else {
+            self.performSegueWithIdentifier(identifier, sender: self)
+        }
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath) as UITableViewCell
         
-        cell.textLabel?.text = demos[indexPath.row]
+        let text = demos[indexPath.row]
+        cell.textLabel?.text = text
+
+        
+        if text == "Powered by Microsoft Cognitive Services" {
+            cell.accessoryType = .None
+            cell.textLabel?.textColor = .blueColor()
+        }
+        else {
+            cell.accessoryType = .DisclosureIndicator
+            cell.textLabel?.textColor = .blackColor()
+        }
         
         return cell
     }
@@ -45,7 +70,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     // MARK: - UITableViewDataSource Delegate
     
     
-    let demos = ["Analyze Image","Describe Image","Get Thumbnail","List Domain Specific Model","OCR","Recognize Domain Specfic Content","Tag Image"]
+    let demos = ["Analyze Image","Describe Image","Get Thumbnail","List Domain Specific Model","OCR","Recognize Domain Specfic Content","Tag Image", "Powered by Microsoft Cognitive Services"]
     
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
