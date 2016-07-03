@@ -89,3 +89,5 @@ License
 
 The SDK is licensed under the Apache License 2.0. For more details, see
 [LICENSE](<https://github.com/DanilaVladi/Microsoft-Cognitive-Services-Swift-SDK/blob/master/LICENSE>).
+
+This project follows the Cognitive Services TOU
