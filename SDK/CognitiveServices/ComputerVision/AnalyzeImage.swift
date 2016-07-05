@@ -188,7 +188,7 @@ class AnalyzeImage: NSObject {
         
         let started = Date()
         
-        let task = URLSession.shared().dataTask(with: request){ data, response, error in
+        let task = URLSession.shared.dataTask(with: request){ data, response, error in
             if error != nil{
                 print("Error -> \(error)")
                 completion(response: nil)

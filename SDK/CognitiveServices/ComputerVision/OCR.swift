@@ -106,7 +106,7 @@ class OCR: NSObject {
         request.httpMethod = "POST"
 
         
-        let task = URLSession.shared().dataTask(with: request) { (data, response, error) in
+        let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
             
         }
 //        
