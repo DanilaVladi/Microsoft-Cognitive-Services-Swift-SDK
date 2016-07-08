@@ -1,7 +1,7 @@
 # Microsoft Cognitive Services Swift SDK
 
 This repo contains a SDK and a sample project for [Microsoft Cognitive Services](<https://www.microsoft.com/cognitive-services>) written in Swift since Microsoft doesn't provide one.
-If you are looking for the Windows, Android or Phython SDK you can find them [here](<https://github.com/Microsoft/ProjectOxford-ClientSDK/tree/master/Vision to https://www.microsoft.com/cognitive-services/en-us/sdk-sample>).
+If you are looking for the Windows, Android or Phython SDK you can find them [here](<https://www.microsoft.com/cognitive-services/en-us/sdk-sample>).
 
 The repo contains a client SDK for the following areas (Work in progress):  
 
@@ -92,6 +92,6 @@ The SDK is licensed under the Apache License 2.0. For more details, see
 
 The SDK uses the Microsoft Cognitive Services, see https://www.microsoft.com/cognitive-services/.  Developers using this are expected to follow the “Developer Code of Conduct for Microsoft Cognitive Services” at http://go.microsoft.com/fwlink/?LinkId=698895.
 
-Data submitted may be retained by Microsoft for service improvement purposes, along with the other stipulations noted in the following documents: Cognitive Services TOU<https://go.microsoft.com/fwlink/?LinkId=533207>, Developer Code of Conduct<http://go.microsoft.com/fwlink/?LinkId=698895>
+Data submitted may be retained by Microsoft for service improvement purposes, along with the other stipulations noted in the following documents: [Cognitive Services TOU](<https://go.microsoft.com/fwlink/?LinkId=533207>), [Developer Code of Conduct](<http://go.microsoft.com/fwlink/?LinkId=698895>)
 
 This project follows the Cognitive Services TOU
