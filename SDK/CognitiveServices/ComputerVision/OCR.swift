@@ -104,29 +104,22 @@ class OCR: NSObject {
         }
         
         request.httpMethod = "POST"
-
         
-        let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
+        let task = URLSession.shared.dataTask(with: request){ data, response, error in
+            if error != nil{
+                print("Error -> \(error)")
+                completion(response: nil)
+                return
+            }else{
+                let results = try! JSONSerialization.jsonObject(with: data!, options: []) as? [String:AnyObject]
+                
+                // Hand dict over
+                DispatchQueue.main.async {
+                    completion(response: results)
+                }
+            }
             
         }
-//        
-//        
-//        
-//        let task = URLSession.shared().dataTask(with: request){ data, response, error in
-//            if error != nil{
-//                print("Error -> \(error)")
-//                completion(response: nil)
-//                return
-//            }else{
-//                let results = try! JSONSerialization.jsonObject(with: data!, options: []) as? [String:AnyObject]
-//                
-//                // Hand dict over
-//                DispatchQueue.main.async {
-//                    completion(response: results)
-//                }
-//            }
-//            
-//        }
         task.resume()
         
     }

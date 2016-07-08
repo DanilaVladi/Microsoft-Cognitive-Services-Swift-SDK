@@ -22,7 +22,9 @@ class AnalyzeImageViewController: UIViewController {
         let requestObject: AnalyzeImageRequestObject = (urlTextField.text!, visualFeatures)
         
         try! analyzeImage.analyzeImageWithRequestObject(requestObject, completion: { (response) in
-            self.textView.text = response?.descriptionText
+            DispatchQueue.main.async(execute: { 
+                self.textView.text = response?.descriptionText
+            })
         })
         
         
@@ -38,7 +40,9 @@ class AnalyzeImageViewController: UIViewController {
         let requestObject: AnalyzeImageRequestObject = (imageView.image!, visualFeatures)
         
         try! analyzeImage.analyzeImageWithRequestObject(requestObject, completion: { (response) in
-            self.textView.text = response?.descriptionText
+            DispatchQueue.main.async(execute: {
+                self.textView.text = response?.descriptionText
+            })
         })
 
     }

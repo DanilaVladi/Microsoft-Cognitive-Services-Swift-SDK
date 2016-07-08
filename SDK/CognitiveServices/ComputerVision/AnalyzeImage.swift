@@ -16,8 +16,13 @@
 
 
 import Foundation
-import CoreGraphics
 import UIKit
+import CoreGraphics
+
+protocol AnalyzeImageDelegate {
+    func finnishedGeneratingObject(_ analyzeImageObject: AnalyzeImage.AnalyzeImageObject)
+}
+
 
 /**
  RequestObject is the required parameter for the AnalyzeImage API containing all required information to perform a request
@@ -38,7 +43,11 @@ typealias AnalyzeImageRequestObject = (resource: AnyObject, visualFeatures: [Ana
 class AnalyzeImage: NSObject {
     
     
-    class AnalyzeImageObject {
+    var delegate: AnalyzeImageDelegate?
+    
+    
+    final class AnalyzeImageObject {
+        
         
         // Categories
         var categories: [[String : AnyObject]]?
@@ -76,45 +85,36 @@ class AnalyzeImage: NSObject {
         var racyContentScore: Float?
         
         
+        var imageData: Data!
         var rawDict: [String : AnyObject]?
         var requestID: String?
         
         
         // Intern Object classes
-        struct FaceObject {
+        typealias FaceObject = FaceStruct
+        struct FaceStruct {
             let age: Int?
             let gender: String?
             let faceRectangle: CGRect?
+            let emotion: String?
         }
         
     }
     
     
     /// The url to perform the requests on
-    let url = "https://api.projectoxford.ai/vision/v1.0/analyze"
+    final let url = "https://api.projectoxford.ai/vision/v1.0/analyze"
     
     /// Your private API key. If you havn't changed it yet, go ahead!
     let key = CognitiveServicesApiKeys.ComputerVision.rawValue
     
     enum AnalyzeImageErros: ErrorProtocol {
         
-        case imageUrlWrongFormatted
+        case error(code: String, message: String)
+        case invalidImageFormat(message: String)
         
-        // Response 400
-        case invalidImageUrl
-        case invalidImageFormat
-        case invalidImageSize
-        case notSupportedVisualFeature
-        case notSupportedImage
-        case invalidDetails
-        
-        // Response 415
-        case invalidMediaType
-        
-        // Response 500
-        case failedToProcess
-        case timeout
-        case internalServerError
+        // Unknown Error
+        case unknown(message: String)
     }
     
     
@@ -145,8 +145,10 @@ class AnalyzeImage: NSObject {
     enum AnalyzeImageDetails: String {
         case None = ""
         case Description = "Description"
+        
+        
+        
     }
-    
     
     
     /**
@@ -154,7 +156,39 @@ class AnalyzeImage: NSObject {
      - parameter requestObject: The required information required to perform a request
      - parameter completion: Once the request has been performed the response is returend as a Dictionary in the completion block.
      */
-    func analyzeImageWithRequestObject(_ requestObject: AnalyzeImageRequestObject, completion: (response: AnalyzeImageObject?) -> Void) throws {
+    //    func analyzeImageWithRequestObject(requestObject: AnalyzeImageRequestObject, completion: (response: AnalyzeImageObject?) -> Void) throws {
+    //
+    //        // Get response
+    //        var response: AnalyzeImageObject? {
+    //            do {
+    //                try _analyzeImageWithRequestObject(requestObject, completion: { (response) in
+    //                    return response
+    //                })
+    //            } catch {
+    //                return nil
+    //            }
+    //            return AnalyzeImageObject()
+    //        }
+    //
+    //
+    //        // filter if there's an error
+    //        if let errorMessage = response?.rawDict?["code"] as? String,
+    //            let code = response?.rawDict?["code"] as? String {
+    //            throw AnalyzeImageErros.Error(code: code, message: errorMessage)
+    //        }
+    //        else {
+    //            completion(response: response)
+    //        }
+    //
+    //
+    //    }
+    //
+    
+    final func analyzeImageWithRequestObject(_ requestObject: AnalyzeImageRequestObject, completion: (response: AnalyzeImageObject?) -> Void) throws {
+        
+        if key == "ComputerVision Key" {
+            assertionFailure("Enter your ComputerVision API key first")
+        }
         
         //Query parameters
         let visualFeatures = requestObject.visualFeatures
@@ -167,6 +201,7 @@ class AnalyzeImage: NSObject {
         var request = URLRequest(url: requestURL)
         request.httpMethod = "POST"
         
+        
         // Request Parameter
         if let path = requestObject.resource as? String {
             request.setValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -176,14 +211,17 @@ class AnalyzeImage: NSObject {
             request.setValue("application/octet-stream", forHTTPHeaderField: "Content-Type")
             request.httpBody = imageData
         }
-        else if let imageData = requestObject.resource as? UIImage {
+        else if let image = requestObject.resource as? UIImage {
             request.setValue("application/octet-stream", forHTTPHeaderField: "Content-Type")
-            request.httpBody = UIImageJPEGRepresentation(imageData, 0.7)
+            let imageData = UIImageJPEGRepresentation(image, 0.7)
+            request.httpBody = imageData
         }
         else {
-            throw AnalyzeImageErros.invalidImageFormat
+            throw AnalyzeImageErros.invalidImageFormat(message: "[Swift SDK] Input data is not a valid image.")
         }
         
+        
+        let imageData = request.httpBody!
         request.setValue(key, forHTTPHeaderField: "Ocp-Apim-Subscription-Key")
         
         let started = Date()
@@ -196,7 +234,7 @@ class AnalyzeImage: NSObject {
             } else {
                 
                 let results = try! JSONSerialization.jsonObject(with: data!, options: []) as? [String:AnyObject]
-                let analyzeObject = self.objectFromDict(results)
+                let analyzeObject = self.objectFromDict(results, data: imageData)
                 
                 let interval = Date().timeIntervalSince(started)
                 print(interval)
@@ -213,43 +251,72 @@ class AnalyzeImage: NSObject {
     }
     
     
-    private func objectFromDict(_ dict: [String : AnyObject]?) -> AnalyzeImageObject {
+    private func objectFromDict(_ dict: [String : AnyObject]?, data: Data) -> AnalyzeImageObject {
         let analyzeObject = AnalyzeImageObject()
         
         analyzeObject.rawDict = dict
+        analyzeObject.imageData = data
         
         if let categories = dict?["categories"] as? [[String : AnyObject]] {
             analyzeObject.categories = categories
         }
         
-        
+        var containsFaces = false
         if let faces = dict?["faces"] as? [[String : AnyObject]] {
-            faces.forEach({ faceDict in
-                let age = faceDict["age"] as? Int
-                let gender = faceDict["gender"] as? String
-                let faceRect = faceDict["faceRectangle"] as? [String : CGFloat]
-                
-                
-                var rect: CGRect? {
-                    if let left = faceRect?["left"],
-                        let top = faceRect?["top"],
-                        let width = faceRect?["width"],
-                        let height = faceRect?["height"] {
-                        
-                        return CGRect(x: left, y: top, width: width, height: height)
-                    }
+            containsFaces = faces.count != 0
+            
+            if faces.count >= 1 {
+                analyzeObject.getEmotions({ emotionFaces in
                     
-                    return nil
-                }
-                
-                
-                let face = AnalyzeImageObject.FaceObject(age: age,
-                    gender: gender,
-                    faceRectangle: rect
-                )
-                
-                analyzeObject.faces?.append(face)
-            })
+                    faces.enumerated().forEach({ faceDict in
+                        
+                        let emotionFace = emotionFaces![faceDict.offset]
+                        
+                        
+                        // Analyze Image face
+                        let age = faceDict.element["age"] as? Int
+                        let gender = faceDict.element["gender"] as? String
+                        let emotionFaceRectangle = emotionFace["faceRectangle"] as? [String : CGFloat]
+                        var rect: CGRect? {
+                            if let left = emotionFaceRectangle?["left"],
+                                let top = emotionFaceRectangle?["top"],
+                                let width = emotionFaceRectangle?["width"],
+                                let height = emotionFaceRectangle?["height"] {
+                                
+                                return CGRect(x: left, y: top, width: width, height: height)
+                            }
+                            
+                            return nil
+                        }
+                        
+                        
+                        let emotions = emotionFace["scores"] as? [String : AnyObject]
+                        
+                        let sortedEmotions = emotions?.sorted { (val1, val2) -> Bool in
+                            return val1.1 as! Float > val2.1 as! Float
+                            }.map {
+                                $0.0
+                        }
+                        
+                        print(sortedEmotions)
+                        
+                        let primaryEmotion = sortedEmotions?.first
+                        print(primaryEmotion)
+                        
+                        let face = AnalyzeImageObject.FaceObject (
+                            age: age,
+                            gender: gender,
+                            faceRectangle: rect,
+                            emotion: primaryEmotion
+                        )
+                        
+                        analyzeObject.faces?.append(face)
+                    })
+                    
+                    self.delegate?.finnishedGeneratingObject(analyzeObject)
+                    
+                })
+            }
             
             
         }
@@ -302,7 +369,82 @@ class AnalyzeImage: NSObject {
         }
         
         
+        if containsFaces == false {
+            delegate?.finnishedGeneratingObject(analyzeObject)
+        }
+        
         return analyzeObject
+        
+    }
+    
+}
+
+
+extension AnalyzeImage.AnalyzeImageObject {
+    
+    func getEmotions(_ completion: (response: [[String : AnyObject]]?) -> Void) {
+        
+        let path = "https://api.projectoxford.ai/emotion/v1.0/recognize"
+        
+        let requestURL = URL(string: path)!
+        
+        var request = URLRequest(url: requestURL)
+        request.httpMethod = "POST"
+        
+        // Request Parameter
+        request.setValue("application/octet-stream", forHTTPHeaderField: "Content-Type")
+        request.httpBody = self.imageData
+        
+        let key = CognitiveServicesApiKeys.Emotion.rawValue
+        
+        if key == "Emotion Key" {
+            assertionFailure("Enter your Emotion API key")
+        }
+        
+        request.setValue(key, forHTTPHeaderField: "Ocp-Apim-Subscription-Key")
+        
+        
+        let task = URLSession.shared.dataTask(with: request){ data, response, error in
+            if error != nil{
+                print("Error -> \(error)")
+                completion(response: nil)
+                return
+            } else {
+                
+                
+                print(data)
+                let results = try! JSONSerialization.jsonObject(with: data!, options: [])
+                
+                // Hand dict over
+                DispatchQueue.main.async {
+                    completion(response: results as? [[String : AnyObject]])
+                }
+            }
+            
+        }
+        task.resume()
+        
+        
+    }
+    
+    
+}
+
+
+extension AnalyzeImage.AnalyzeImageObject {
+    
+    class func createTestFace() -> FaceObject {
+        
+        let emotions = ["Neutral", "Happy", "Bored", "Excited"]
+        
+        let face = FaceObject(
+            age: Int(arc4random_uniform(60)),
+            gender: "Male",
+            faceRectangle: CGRect(x: 0, y: 0, width: 400, height: 400),
+            emotion: emotions[Int(arc4random_uniform(UInt32(emotions.count - 1)))]
+        )
+        
+        return face
     }
     
 }

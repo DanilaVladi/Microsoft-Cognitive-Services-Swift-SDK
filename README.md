@@ -1,7 +1,7 @@
 # Microsoft Cognitive Services Swift SDK
 
 This repo contains a SDK and a sample project for [Microsoft Cognitive Services](<https://www.microsoft.com/cognitive-services>) written in Swift since Microsoft doesn't provide one.
-If you are looking for the Windows, Android or Phython SDK you can find them [here](<https://github.com/Microsoft/ProjectOxford-ClientSDK/tree/master/Vision>).
+If you are looking for the Windows, Android or Phython SDK you can find them [here](<https://github.com/Microsoft/ProjectOxford-ClientSDK/tree/master/Vision to https://www.microsoft.com/cognitive-services/en-us/sdk-sample>).
 
 The repo contains a client SDK for the following areas (Work in progress):  
 
@@ -51,7 +51,7 @@ Contributing
 ============
 In case you want to contribute go ahead and create that pull request :).There's plenty more to do. Feel free to file issues on the repo and I'll try address them as soon as possible.
 
-For questions, feedback, or suggestions about the SDK, feel free to get in touch with [me](mailto:vladidanila@me.com?Subject=Microsoft-Cognitive-Services-Swift-SDK&Body=Hi%20Vladimir%20). If you have questions about Microsfts Cognitive Services please get in touch with them.
+For questions, feedback, or suggestions about the SDK, feel free to get in touch with [me](mailto:vladidanila@me.com?Subject=Microsoft-Cognitive-Services-Swift-SDK&Body=Hi%20Vladimir%20). [Here](<https://stackoverflow.com/tags/microsoft-cognitive/info>) you get help with questions about the Cognitive Services.
 
 
 
@@ -89,5 +89,9 @@ License
 
 The SDK is licensed under the Apache License 2.0. For more details, see
 [LICENSE](<https://github.com/DanilaVladi/Microsoft-Cognitive-Services-Swift-SDK/blob/master/LICENSE>).
+
+The SDK uses the Microsoft Cognitive Services, see https://www.microsoft.com/cognitive-services/.  Developers using this are expected to follow the “Developer Code of Conduct for Microsoft Cognitive Services” at http://go.microsoft.com/fwlink/?LinkId=698895.
+
+Data submitted may be retained by Microsoft for service improvement purposes, along with the other stipulations noted in the following documents: Cognitive Services TOU<https://go.microsoft.com/fwlink/?LinkId=533207>, Developer Code of Conduct<http://go.microsoft.com/fwlink/?LinkId=698895>
 
 This project follows the Cognitive Services TOU
