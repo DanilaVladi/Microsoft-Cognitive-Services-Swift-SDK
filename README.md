@@ -19,7 +19,7 @@ content -- image categories, pornographic detection, dominant color, and more.
 -   Describe images in complete sentences and recognize celebrities that appear in
     photos.
 
-### Generate a thumbnail (Comming Soon)
+### Generate a thumbnail (Coming Soon)
 
 Given an input image, you will be able to generate a high quality and storage
 efficient thumbnail.
