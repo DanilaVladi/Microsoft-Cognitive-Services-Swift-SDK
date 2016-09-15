@@ -13,8 +13,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
-
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
+    private func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
         
         print("Data submitted may be retained by Microsoft for service improvement purposes, along with the other stipulations noted in the following documents: Cognitive Services TOU<https://go.microsoft.com/fwlink/?LinkId=533207>, Developer Code of Conduct<http://go.microsoft.com/fwlink/?LinkId=698895>")

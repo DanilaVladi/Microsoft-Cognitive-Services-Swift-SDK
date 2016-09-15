@@ -43,7 +43,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                 let sfViewController = SFSafariViewController(url: url)
                 self.present(sfViewController, animated: true, completion: nil)
             } else {
-                UIApplication.shared().openURL(url)
+                UIApplication.shared.openURL(url)
             }
             
             
@@ -72,11 +72,11 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         
         if text == "Powered by Microsoft Cognitive Services" {
             cell.accessoryType = .none
-            cell.textLabel?.textColor = .blue()
+            cell.textLabel?.textColor = .blue
         }
         else {
             cell.accessoryType = .disclosureIndicator
-            cell.textLabel?.textColor = .black()
+            cell.textLabel?.textColor = .black
         }
         
         return cell
@@ -97,8 +97,8 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
 
     
-    override func prepare(for segue: UIStoryboardSegue, sender: AnyObject?) {
-        segue.destinationViewController.navigationItem.title = demos[(tableView.indexPathForSelectedRow! as NSIndexPath).row]
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        segue.destination.navigationItem.title = demos[(tableView.indexPathForSelectedRow! as NSIndexPath).row]
         tableView.deselectRow(at: tableView.indexPathForSelectedRow!, animated: true)
     }
 

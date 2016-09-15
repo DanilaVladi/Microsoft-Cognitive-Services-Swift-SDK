@@ -38,7 +38,7 @@ class OCRViewController: UIViewController {
 
     }
     
-    
+     
     @IBAction func textFromImageDidPush(_ sender: UIButton) {
         
         let requestObject: OCRRequestObject = (resource: UIImagePNGRepresentation(UIImage(named: "ocrDemo")!)!, language: .Automatic, detectOrientation: true)

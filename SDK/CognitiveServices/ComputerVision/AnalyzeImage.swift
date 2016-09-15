@@ -29,7 +29,7 @@ protocol AnalyzeImageDelegate {
  - parameter resource: The path or data of the image or
  - parameter visualFeatures, details: Read more about those [here](https://dev.projectoxford.ai/docs/services/56f91f2d778daf23d8ec6739/operations/56f91f2e778daf14a499e1fa)
  */
-typealias AnalyzeImageRequestObject = (resource: AnyObject, visualFeatures: [AnalyzeImage.AnalyzeImageVisualFeatures])
+typealias AnalyzeImageRequestObject = (resource: Any, visualFeatures: [AnalyzeImage.AnalyzeImageVisualFeatures])
 
 
 /**
@@ -108,7 +108,7 @@ class AnalyzeImage: NSObject {
     /// Your private API key. If you havn't changed it yet, go ahead!
     let key = CognitiveServicesApiKeys.ComputerVision.rawValue
     
-    enum AnalyzeImageErros: ErrorProtocol {
+    enum AnalyzeImageErros: Error {
         
         case error(code: String, message: String)
         case invalidImageFormat(message: String)
@@ -184,7 +184,7 @@ class AnalyzeImage: NSObject {
     //    }
     //
     
-    final func analyzeImageWithRequestObject(_ requestObject: AnalyzeImageRequestObject, completion: (response: AnalyzeImageObject?) -> Void) throws {
+    final func analyzeImageWithRequestObject(_ requestObject: AnalyzeImageRequestObject, completion: @escaping (_ response: AnalyzeImageObject?) -> Void) throws {
         
         if key == "ComputerVision Key" {
             assertionFailure("Enter your ComputerVision API key first")
@@ -229,7 +229,7 @@ class AnalyzeImage: NSObject {
         let task = URLSession.shared.dataTask(with: request){ data, response, error in
             if error != nil{
                 print("Error -> \(error)")
-                completion(response: nil)
+                completion(nil)
                 return
             } else {
                 
@@ -241,7 +241,7 @@ class AnalyzeImage: NSObject {
                 
                 // Hand dict over
                 DispatchQueue.main.async {
-                    completion(response: analyzeObject)
+                    completion(analyzeObject)
                 }
             }
             
@@ -382,7 +382,7 @@ class AnalyzeImage: NSObject {
 
 extension AnalyzeImage.AnalyzeImageObject {
     
-    func getEmotions(_ completion: (response: [[String : AnyObject]]?) -> Void) {
+    func getEmotions(_ completion: @escaping (_ response: [[String : AnyObject]]?) -> Void) {
         
         let path = "https://api.projectoxford.ai/emotion/v1.0/recognize"
         
@@ -407,7 +407,7 @@ extension AnalyzeImage.AnalyzeImageObject {
         let task = URLSession.shared.dataTask(with: request){ data, response, error in
             if error != nil{
                 print("Error -> \(error)")
-                completion(response: nil)
+                completion(nil)
                 return
             } else {
                 
@@ -417,7 +417,7 @@ extension AnalyzeImage.AnalyzeImageObject {
                 
                 // Hand dict over
                 DispatchQueue.main.async {
-                    completion(response: results as? [[String : AnyObject]])
+                    completion(results as? [[String : AnyObject]])
                 }
             }
             

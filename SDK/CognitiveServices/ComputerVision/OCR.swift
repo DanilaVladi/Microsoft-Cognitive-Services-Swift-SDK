@@ -23,7 +23,7 @@ import Foundation
  - parameter resource: The path or data of the image or
  - parameter language, detectOrientation: Read more about those [here](https://dev.projectoxford.ai/docs/services/56f91f2d778daf23d8ec6739/operations/56f91f2e778daf14a499e1fa)
  */
-typealias OCRRequestObject = (resource: AnyObject, language: OCR.Langunages, detectOrientation: Bool)
+typealias OCRRequestObject = (resource: Any, language: OCR.Langunages, detectOrientation: Bool)
 
 
 /**
@@ -70,7 +70,7 @@ class OCR: NSObject {
     }
     
     
-    enum RecognizeCharactersErrors: ErrorProtocol {
+    enum RecognizeCharactersErrors: Error {
         case unknownError
         case imageUrlWrongFormatted
         case emptyDictionary
@@ -83,8 +83,8 @@ class OCR: NSObject {
      - parameter language: The languange
      - parameter completion: Once the request has been performed the response is returend in the completion block.
      */
-    func recognizeCharactersWithRequestObject(_ requestObject: OCRRequestObject, completion: (response: [String:AnyObject]? ) -> Void) throws {
-        
+    func recognizeCharactersWithRequestObject(_ requestObject: OCRRequestObject, completion: @escaping (_ response: [String:AnyObject]? ) -> Void) throws {
+
         // Generate the url
         let requestUrlString = url + "?language=" + requestObject.language.rawValue + "&detectOrientation%20=\(requestObject.detectOrientation)"
         let requestUrl = URL(string: requestUrlString)
@@ -108,14 +108,14 @@ class OCR: NSObject {
         let task = URLSession.shared.dataTask(with: request){ data, response, error in
             if error != nil{
                 print("Error -> \(error)")
-                completion(response: nil)
+                completion(nil)
                 return
             }else{
                 let results = try! JSONSerialization.jsonObject(with: data!, options: []) as? [String:AnyObject]
                 
                 // Hand dict over
                 DispatchQueue.main.async {
-                    completion(response: results)
+                    completion(results)
                 }
             }
             
@@ -140,13 +140,16 @@ class OCR: NSObject {
         
         // Get lines from the regions dictionary
         let lines = regions!["lines"] as! NSArray
-        
+
+
+        // TODO: Check if this works
+
         // Get words from lines
-        let inLine = lines.enumerated().map {$0.element["words"] as! [[String : AnyObject]] }
+        let inLine = lines.enumerated().map {($0.element as? NSDictionary)?["words"] as! [[String : AnyObject]] }
         
         // Get text from words
         let extractedText = inLine.enumerated().map { $0.element[0]["text"] as! String}
-        
+
         return extractedText
     }
     
@@ -159,8 +162,7 @@ class OCR: NSObject {
         
         let stringArray = extractStringsFromDictionary(dictionary)
         
-        let reducedArray = stringArray.enumerated().reduce("", combine:
-            {
+        let reducedArray = stringArray.enumerated().reduce("", {
                 $0 + $1.element + ($1.offset < stringArray.endIndex-1 ? " " : "")
             }
         )
