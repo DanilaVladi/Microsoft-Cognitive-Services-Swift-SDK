@@ -8,7 +8,7 @@
 
 import UIKit
 
-class AnalyzeImageViewController: UIViewController {
+class AnalyzeImageViewController: UIViewController, UITextFieldDelegate, AnalyzeImageDelegate {
 
     @IBOutlet var textView: UITextView!
     @IBOutlet var urlTextField: UITextField!
@@ -18,6 +18,8 @@ class AnalyzeImageViewController: UIViewController {
     @IBAction func analyzeFromURLDidPush(_ sender: AnyObject) {
         
         let analyzeImage = CognitiveServices.sharedInstance.analyzeImage
+		analyzeImage.delegate = self
+
         let visualFeatures: [AnalyzeImage.AnalyzeImageVisualFeatures] = [.Categories, .Description, .Faces, .ImageType, .Color, .Adult]
         let requestObject: AnalyzeImageRequestObject = (urlTextField.text!, visualFeatures)
         
@@ -26,15 +28,13 @@ class AnalyzeImageViewController: UIViewController {
                 self.textView.text = response?.descriptionText
             })
         })
-        
-        
     }
 
     
     @IBAction func analyzeImageDidPush(_ sender: AnyObject) {
-        
-        
+
         let analyzeImage = CognitiveServices.sharedInstance.analyzeImage
+		analyzeImage.delegate = self
 
         let visualFeatures: [AnalyzeImage.AnalyzeImageVisualFeatures] = [.Categories, .Description, .Faces, .ImageType, .Color, .Adult]
         let requestObject: AnalyzeImageRequestObject = (imageView.image!, visualFeatures)
@@ -46,5 +46,22 @@ class AnalyzeImageViewController: UIViewController {
         })
 
     }
+
+
+	// MARK: - TextFieldDelegate
+
+	func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+		textField.resignFirstResponder()
+
+		return true
+	}
+
+	// MARK: - AnalyzeImageDelegate
+
+	func finnishedGeneratingObject(_ analyzeImageObject: AnalyzeImage.AnalyzeImageObject) {
+
+		// Here you could do more with this object. It for instance contains the recognized emotions that weren't available before.
+		print(analyzeImageObject)
+	}
 
 }

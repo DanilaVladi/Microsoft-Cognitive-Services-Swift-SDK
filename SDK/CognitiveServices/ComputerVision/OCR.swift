@@ -42,7 +42,6 @@ class OCR: NSObject {
     /// Your private API key. If you havn't changed it yet, go ahead!
     let key = CognitiveServicesApiKeys.ComputerVision.rawValue
     
-    
     /// Detectable Languages
     enum Langunages: String {
         case Automatic = "unk"
@@ -69,13 +68,11 @@ class OCR: NSObject {
         case Turkish = "tr"
     }
     
-    
     enum RecognizeCharactersErrors: Error {
         case unknownError
         case imageUrlWrongFormatted
         case emptyDictionary
     }
-    
     
     /**
      Optical Character Recognition (OCR) detects text in an image and extracts the recognized characters into a machine-usable character stream.
@@ -124,11 +121,7 @@ class OCR: NSObject {
         
     }
     
-    
-    
-    
-    
-    /**
+	/**
      Returns an Array of Strings extracted from the Dictionary generated from `recognizeCharactersOnImageUrl()`
      - Parameter dictionary: The Dictionary created by `recognizeCharactersOnImageUrl()`.
      - Returns: An String Array extracted from the Dictionary.

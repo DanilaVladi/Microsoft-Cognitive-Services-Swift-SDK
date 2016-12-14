@@ -24,5 +24,4 @@ class ListDomainSpecificModels: NSObject {
     
     /// Your private API key. If you havn't changed it yet, go ahead!
     let key = CognitiveServicesApiKeys.ComputerVision.rawValue
-    
 }

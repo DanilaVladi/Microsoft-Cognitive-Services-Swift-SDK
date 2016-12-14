@@ -14,8 +14,7 @@ class OCRViewController: UIViewController {
     @IBOutlet weak var resultTextView: UITextView!
     let ocr = CognitiveServices.sharedInstance.ocr
 
-    
-    override func viewDidLoad() {
+	override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.

@@ -20,9 +20,10 @@ import UIKit
 import CoreGraphics
 
 protocol AnalyzeImageDelegate {
+
+	/// Images that contain faces will be analyzed further for the emotions contained in the image. Since that might take longer than the initially returned object this delegate is recommended. 
     func finnishedGeneratingObject(_ analyzeImageObject: AnalyzeImage.AnalyzeImageObject)
 }
-
 
 /**
  RequestObject is the required parameter for the AnalyzeImage API containing all required information to perform a request
@@ -30,7 +31,6 @@ protocol AnalyzeImageDelegate {
  - parameter visualFeatures, details: Read more about those [here](https://dev.projectoxford.ai/docs/services/56f91f2d778daf23d8ec6739/operations/56f91f2e778daf14a499e1fa)
  */
 typealias AnalyzeImageRequestObject = (resource: Any, visualFeatures: [AnalyzeImage.AnalyzeImageVisualFeatures])
-
 
 /**
  Analyze Image
@@ -117,8 +117,7 @@ class AnalyzeImage: NSObject {
         case unknown(message: String)
     }
     
-    
-    
+
     /**
      Used as a parameter for `recognizeCharactersOnImageUrl`
      
@@ -145,52 +144,15 @@ class AnalyzeImage: NSObject {
     enum AnalyzeImageDetails: String {
         case None = ""
         case Description = "Description"
-        
-        
-        
     }
-    
-    
-    /**
-     This operation extracts a rich set of visual features based on the image content.
-     - parameter requestObject: The required information required to perform a request
-     - parameter completion: Once the request has been performed the response is returend as a Dictionary in the completion block.
-     */
-    //    func analyzeImageWithRequestObject(requestObject: AnalyzeImageRequestObject, completion: (response: AnalyzeImageObject?) -> Void) throws {
-    //
-    //        // Get response
-    //        var response: AnalyzeImageObject? {
-    //            do {
-    //                try _analyzeImageWithRequestObject(requestObject, completion: { (response) in
-    //                    return response
-    //                })
-    //            } catch {
-    //                return nil
-    //            }
-    //            return AnalyzeImageObject()
-    //        }
-    //
-    //
-    //        // filter if there's an error
-    //        if let errorMessage = response?.rawDict?["code"] as? String,
-    //            let code = response?.rawDict?["code"] as? String {
-    //            throw AnalyzeImageErros.Error(code: code, message: errorMessage)
-    //        }
-    //        else {
-    //            completion(response: response)
-    //        }
-    //
-    //
-    //    }
-    //
-    
+
     final func analyzeImageWithRequestObject(_ requestObject: AnalyzeImageRequestObject, completion: @escaping (_ response: AnalyzeImageObject?) -> Void) throws {
         
         if key == "ComputerVision Key" {
             assertionFailure("Enter your ComputerVision API key first")
         }
-        
-        //Query parameters
+
+        // Query parameters
         let visualFeatures = requestObject.visualFeatures
             .map {$0.rawValue}
             .joined(separator: ",")
@@ -220,7 +182,6 @@ class AnalyzeImage: NSObject {
             throw AnalyzeImageErros.invalidImageFormat(message: "[Swift SDK] Input data is not a valid image.")
         }
         
-        
         let imageData = request.httpBody!
         request.setValue(key, forHTTPHeaderField: "Ocp-Apim-Subscription-Key")
         
@@ -246,11 +207,10 @@ class AnalyzeImage: NSObject {
             }
             
         }
+
         task.resume()
-        
     }
-    
-    
+
     private func objectFromDict(_ dict: [String : AnyObject]?, data: Data) -> AnalyzeImageObject {
         let analyzeObject = AnalyzeImageObject()
         
@@ -298,10 +258,10 @@ class AnalyzeImage: NSObject {
                                 $0.0
                         }
                         
-                        print(sortedEmotions)
+                        print("Sorted emotions: " + sortedEmotions!.description)
                         
                         let primaryEmotion = sortedEmotions?.first
-                        print(primaryEmotion)
+                        print("Primary Emotion :" + primaryEmotion!)
                         
                         let face = AnalyzeImageObject.FaceObject (
                             age: age,
@@ -314,11 +274,8 @@ class AnalyzeImage: NSObject {
                     })
                     
                     self.delegate?.finnishedGeneratingObject(analyzeObject)
-                    
                 })
             }
-            
-            
         }
         
         
@@ -359,7 +316,6 @@ class AnalyzeImage: NSObject {
             
         }
         
-        
         if let color = dict?["color"] as? [String : AnyObject] {
             analyzeObject.blackAndWhite = color["isBWImg"] as? Bool
             analyzeObject.dominantForegroundColor = color["dominantColorForeground"] as? String
@@ -379,11 +335,10 @@ class AnalyzeImage: NSObject {
     
 }
 
-
 extension AnalyzeImage.AnalyzeImageObject {
     
     func getEmotions(_ completion: @escaping (_ response: [[String : AnyObject]]?) -> Void) {
-        
+
         let path = "https://api.projectoxford.ai/emotion/v1.0/recognize"
         
         let requestURL = URL(string: path)!
@@ -400,7 +355,7 @@ extension AnalyzeImage.AnalyzeImageObject {
         if key == "Emotion Key" {
             assertionFailure("Enter your Emotion API key")
         }
-        
+
         request.setValue(key, forHTTPHeaderField: "Ocp-Apim-Subscription-Key")
         
         
@@ -410,26 +365,22 @@ extension AnalyzeImage.AnalyzeImageObject {
                 completion(nil)
                 return
             } else {
-                
-                
-                print(data)
-                let results = try! JSONSerialization.jsonObject(with: data!, options: [])
-                
-                // Hand dict over
-                DispatchQueue.main.async {
-                    completion(results as? [[String : AnyObject]])
-                }
+
+				if let results = try! JSONSerialization.jsonObject(with: data!, options: []) as? [[String : AnyObject]] {
+					// Hand dict over
+					DispatchQueue.main.async {
+						completion(results)
+					}
+				}
+				else {
+					print((try! JSONSerialization.jsonObject(with: data!, options: []) as? [String : Any]) ?? "Something went wrong with the Emotion API")
+				}
             }
             
         }
         task.resume()
-        
-        
     }
-    
-    
 }
-
 
 extension AnalyzeImage.AnalyzeImageObject {
     
