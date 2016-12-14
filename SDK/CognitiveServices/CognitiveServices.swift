@@ -23,8 +23,8 @@ import Foundation
 enum CognitiveServicesApiKeys: String {
     
     // Vision
-    case ComputerVision = "d43678a9f9ca486a9cac22d2d77005e4"
-    case Emotion = "9cef9b071e4749b7baae22649c0f33d1"
+    case ComputerVision = "ComputerVision Key"
+    case Emotion = "Emotion Key"
     case Face = "Face Key"
     case Video = "Video Key"
     
