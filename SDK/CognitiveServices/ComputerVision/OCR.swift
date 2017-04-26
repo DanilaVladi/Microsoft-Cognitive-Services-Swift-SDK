@@ -127,7 +127,8 @@ class OCR: NSObject {
      - Returns: An String Array extracted from the Dictionary.
      */
     func extractStringsFromDictionary(_ dictionary: [String : AnyObject]) -> [String] {
-        
+        if dictionary["regions"] != nil {
+
         // Get Regions from the dictionary
         let regions = (dictionary["regions"] as! NSArray).firstObject as? [String:AnyObject]
         
@@ -144,6 +145,9 @@ class OCR: NSObject {
         let extractedText = inLine.enumerated().map { $0.element[0]["text"] as! String}
 
         return extractedText
+	} else {
+            return [""];
+        }
     }
     
     /**
