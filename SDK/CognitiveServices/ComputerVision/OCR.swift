@@ -138,13 +138,33 @@ class OCR: NSObject {
 
         // TODO: Check if this works
 
-        // Get words from lines
-        let inLine = lines.enumerated().map {($0.element as? NSDictionary)?["words"] as! [[String : AnyObject]] }
-        
-        // Get text from words
-        let extractedText = inLine.enumerated().map { $0.element[0]["text"] as! String}
+            /*Added support for multiline picture urls [http://inktank.fi/wp-content/uploads/2015/07/jim-morrison-quote.jpg]*/
+            var extractedText : String = ""
+            for words in lines{
+                print (words)
+                if let wordsArr = words as? [String:AnyObject]{
+                    if let dictionaryValue = wordsArr["words"] as? [AnyObject]{
+                        for a in dictionaryValue {
+                            if let z = a as? [String : String]{
+                                print (z["text"]!)
+                                extractedText += z["text"]! + " "
+                            }
+                        }
+                    }
+                }
+            }
 
-        return extractedText
+            
+            
+            
+            
+//        // Get words from lines
+//        let inLine = lines.enumerated().map {($0.element as? NSDictionary)?["words"] as! [[String : AnyObject]] }
+//        
+//        // Get text from words
+//        let extractedText = inLine.enumerated().map { $0.element[0]["text"] as! String}
+
+        return [extractedText]
 	} else {
             return [""];
         }

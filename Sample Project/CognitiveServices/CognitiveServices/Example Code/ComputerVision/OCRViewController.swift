@@ -29,10 +29,10 @@ class OCRViewController: UIViewController {
     @IBAction func textFromUrlDidPush(_ sender: UIButton) {
         let requestObject: OCRRequestObject = (resource: urlTextField.text!, language: .Automatic, detectOrientation: true)
         try! ocr.recognizeCharactersWithRequestObject(requestObject, completion: { (response) in
-            
-            let text = self.ocr.extractStringFromDictionary(response!)
-            self.resultTextView.text = text
-            
+            if (response != nil){
+                let text = self.ocr.extractStringFromDictionary(response!)
+                self.resultTextView.text = text
+            }
         })
 
     }
@@ -42,10 +42,10 @@ class OCRViewController: UIViewController {
         
         let requestObject: OCRRequestObject = (resource: UIImagePNGRepresentation(UIImage(named: "ocrDemo")!)!, language: .Automatic, detectOrientation: true)
         try! ocr.recognizeCharactersWithRequestObject(requestObject, completion: { (response) in
-            
-            let text = self.ocr.extractStringFromDictionary(response!)
-            self.resultTextView.text = text
-            
+            if (response != nil){
+                let text = self.ocr.extractStringFromDictionary(response!)
+                self.resultTextView.text = text
+            }
         })
 
     }
