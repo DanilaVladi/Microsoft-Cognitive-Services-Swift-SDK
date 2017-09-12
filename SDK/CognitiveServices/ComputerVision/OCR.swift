@@ -128,48 +128,39 @@ class OCR: NSObject {
      */
     func extractStringsFromDictionary(_ dictionary: [String : AnyObject]) -> [String] {
         if dictionary["regions"] != nil {
-
-        // Get Regions from the dictionary
-        let regions = (dictionary["regions"] as! NSArray).firstObject as? [String:AnyObject]
-        
-        // Get lines from the regions dictionary
-        let lines = regions!["lines"] as! NSArray
-
-
-        // TODO: Check if this works
-
-            /*Added support for multiline picture urls [http://inktank.fi/wp-content/uploads/2015/07/jim-morrison-quote.jpg]*/
             var extractedText : String = ""
-            for words in lines{
-                print (words)
-                if let wordsArr = words as? [String:AnyObject]{
-                    if let dictionaryValue = wordsArr["words"] as? [AnyObject]{
-                        for a in dictionaryValue {
-                            if let z = a as? [String : String]{
-                                print (z["text"]!)
-                                extractedText += z["text"]! + " "
+            
+            if let regionsz = dictionary["regions"] as? [AnyObject]{
+                for reigons1 in regionsz
+                {
+                    if let reigons = reigons1 as? [String:AnyObject]
+                    {
+                        let lines = reigons["lines"] as! NSArray
+                        print (lines)
+                        for words in lines{
+                            if let wordsArr = words as? [String:AnyObject]{
+                                if let dictionaryValue = wordsArr["words"] as? [AnyObject]{
+                                    for a in dictionaryValue {
+                                        if let z = a as? [String : String]{
+                                            print (z["text"]!)
+                                            extractedText += z["text"]! + " "
+                                        }
+                                    }
+                                }
                             }
                         }
                     }
                 }
+                
             }
-
-            
-            
-            
-            
-//        // Get words from lines
-//        let inLine = lines.enumerated().map {($0.element as? NSDictionary)?["words"] as! [[String : AnyObject]] }
-//        
-//        // Get text from words
-//        let extractedText = inLine.enumerated().map { $0.element[0]["text"] as! String}
-
-        return [extractedText]
-	} else {
+            // Get text from words
+            return [extractedText]
+        }
+        else
+        {
             return [""];
         }
     }
-    
     /**
      Returns a String extracted from the Dictionary generated from `recognizeCharactersOnImageUrl()`
      - Parameter dictionary: The Dictionary created by `recognizeCharactersOnImageUrl()`.
